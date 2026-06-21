@@ -1,0 +1,38 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+}
+.logo img {
+  width: auto;
+  object-fit: contain;
+}
+.logo__fallback {
+  align-items: center;
+  gap: 10px;
+}
+.logo__mark {
+  color: var(--red);
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 3px 6px rgba(225, 27, 34, 0.35));
+}
+.logo__word {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.95;
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+  color: var(--red);
+}
+.logo__word small {
+  font-size: 0.5rem;
+  letter-spacing: 0.32em;
+  font-weight: 700;
+  color: var(--ink-3);
+  margin-top: 3px;
+}
+.logo--stacked .logo__fallback {
+  flex-direction: column;
+  gap: 4px;
+}

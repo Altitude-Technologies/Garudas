@@ -1,0 +1,233 @@
+/* =========================================================================
+   Garudas — Design Tokens & Global Styles
+   Two-colour system: Garudas Red (primary) + Warm Cream / Ink (match).
+   Font: Inter.
+   ========================================================================= */
+
+:root {
+  /* --- Brand: red (sampled from the Garudas logo) --- */
+  --red: #e10e12;
+  --red-deep: #b00c0f;
+  --red-darker: #6f0608;
+  --red-soft: #fdeaea;
+
+  /* --- Match: warm cream + ink --- */
+  --cream: #fff8f0;
+  --cream-2: #fdf1e3;
+  --cream-3: #f7e9d7;
+  --ink: #1a1a1a;
+  --ink-2: #4a4440;
+  --ink-3: #8a827b;
+  --line: #ece2d4;
+  --white: #ffffff;
+
+  /* --- Roles --- */
+  --bg: var(--cream);
+  --surface: var(--white);
+  --text: var(--ink);
+  --muted: var(--ink-2);
+  --primary: var(--red);
+
+  /* --- Type --- */
+  --font: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  /* --- Shape & depth --- */
+  --r-sm: 10px;
+  --r: 16px;
+  --r-lg: 24px;
+  --r-xl: 34px;
+  --shadow-sm: 0 2px 10px rgba(26, 26, 26, 0.05);
+  --shadow: 0 10px 30px rgba(26, 26, 26, 0.08);
+  --shadow-lg: 0 22px 56px rgba(26, 26, 26, 0.12);
+
+  /* --- Layout --- */
+  --container: 1240px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --header-h: 132px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Lenis owns scrolling — html stays static, body scrolls smoothly. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+ul {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+::selection {
+  background: var(--red);
+  color: #fff;
+}
+
+/* --- Reusable layout helpers --- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.section-title {
+  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+  font-weight: 800;
+  color: var(--ink);
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease),
+    background 0.3s var(--ease);
+  white-space: nowrap;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn--primary {
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(225, 14, 18, 0.22);
+}
+.btn--primary:hover {
+  background: var(--red-deep);
+  box-shadow: 0 12px 26px rgba(225, 14, 18, 0.3);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+}
+.btn--ghost:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+.btn--light {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+.btn--glass {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+}
+.btn--glass:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* --- Card --- */
+.card {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+/* --- Pill chip --- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* --- Reveal-on-scroll base (used with framer where heavy) --- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* --- Scrollbar (cosmetic) --- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cream-3);
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e6cfb3;
+}
