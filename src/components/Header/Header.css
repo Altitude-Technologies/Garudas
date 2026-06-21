@@ -301,6 +301,21 @@
     display: none;
   }
 }
+/* Hamburger appears once the desktop nav is hidden. */
+.hdr__burger {
+  display: none;
+}
+@media (max-width: 860px) {
+  .nav {
+    display: none;
+  }
+  .hdr__burger {
+    display: grid;
+  }
+  .iconbtn--hide {
+    display: none;
+  }
+}
 @media (max-width: 720px) {
   .topbar__socials,
   .topbar__spacer {
@@ -309,13 +324,173 @@
   .topbar__inner {
     grid-template-columns: 1fr;
   }
-  .nav {
-    display: none;
-  }
   .navbar__inner {
     height: 70px;
   }
   .mega__strip-inner {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* ============================ MOBILE DRAWER ============================ */
+.mmenu {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  visibility: hidden;
+  overflow: hidden; /* keep the off-screen (closed) panel from widening the page */
+}
+.mmenu.is-open {
+  visibility: visible;
+}
+.mmenu__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 4, 4, 0.5);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.mmenu.is-open .mmenu__scrim {
+  opacity: 1;
+}
+.mmenu__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(88vw, 384px);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.42s var(--ease);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
+}
+.mmenu.is-open .mmenu__panel {
+  transform: translateX(0);
+}
+.mmenu__head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.mmenu__close {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  background: var(--cream-2);
+  transition: background 0.2s, color 0.2s;
+}
+.mmenu__close:hover {
+  background: var(--red);
+  color: #fff;
+}
+.mmenu__nav {
+  padding: 6px 4px;
+}
+.mmenu__group {
+  border-bottom: 1px solid var(--line);
+}
+.mmenu__cat {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 14px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+.mmenu__cat.is-open {
+  color: var(--red);
+}
+.mmenu__chev {
+  transition: transform 0.3s var(--ease);
+}
+.mmenu__cat.is-open .mmenu__chev {
+  transform: rotate(180deg);
+}
+.mmenu__sub {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.42s var(--ease);
+}
+.mmenu__sub.is-open {
+  max-height: 2600px;
+}
+.mmenu__col {
+  padding: 2px 14px 14px;
+}
+.mmenu__colname {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin: 10px 0 8px;
+}
+.mmenu__col ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px 14px;
+}
+.mmenu__col a {
+  font-size: 0.86rem;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.mmenu__col a:active {
+  color: var(--red);
+}
+.mmenu__quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid var(--line);
+}
+.mmenu__quick a {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--cream-2);
+  padding: 8px 14px;
+  border-radius: 100px;
+}
+.mmenu__foot {
+  margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 16px;
+  border-top: 1px solid var(--line);
+}
+.mmenu__foot .btn {
+  width: 100%;
+  justify-content: center;
+}
+.mmenu__account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+.mmenu__account span {
+  width: 1px;
+  height: 14px;
+  background: var(--line);
 }

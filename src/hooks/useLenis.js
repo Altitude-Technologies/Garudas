@@ -12,6 +12,9 @@ export function useLenis() {
       touchMultiplier: 1.5,
     })
 
+    // Expose so UI (e.g. the mobile drawer) can pause/resume scrolling.
+    window.lenis = lenis
+
     let raf
     const loop = (time) => {
       lenis.raf(time)
@@ -38,6 +41,7 @@ export function useLenis() {
       document.removeEventListener('click', onClick)
       cancelAnimationFrame(raf)
       lenis.destroy()
+      delete window.lenis
     }
   }, [])
 }

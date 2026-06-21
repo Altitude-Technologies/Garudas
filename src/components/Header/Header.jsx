@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Logo from '../Logo.jsx'
 import MegaMenu from './MegaMenu.jsx'
+import MobileMenu from './MobileMenu.jsx'
 import { NAV } from '../../lib/products.js'
 import './Header.css'
 
@@ -18,6 +19,7 @@ const SOCIALS = [
 export default function Header() {
   const [active, setActive] = useState(null) // active nav id (mega menu)
   const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -75,7 +77,7 @@ export default function Header() {
           </nav>
 
           <div className="navbar__actions">
-            <button className="iconbtn" aria-label="Search">
+            <button className="iconbtn iconbtn--hide" aria-label="Search">
               <svg viewBox="0 0 24 24" width="22" height="22">
                 <path
                   fill="none"
@@ -86,7 +88,7 @@ export default function Header() {
                 />
               </svg>
             </button>
-            <button className="iconbtn" aria-label="Account">
+            <button className="iconbtn iconbtn--hide" aria-label="Account">
               <svg viewBox="0 0 24 24" width="22" height="22">
                 <path
                   fill="none"
@@ -110,12 +112,24 @@ export default function Header() {
               </svg>
               <span className="iconbtn__badge">1</span>
             </button>
+            <button
+              className="iconbtn hdr__burger"
+              aria-label="Open menu"
+              onClick={() => setMobileOpen(true)}
+            >
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* ---- Mega menu ---- */}
+      {/* ---- Mega menu (desktop) ---- */}
       <MegaMenu activeId={active} onClose={() => setActive(null)} />
+
+      {/* ---- Mobile drawer ---- */}
+      <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
     </header>
   )
 }
