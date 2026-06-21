@@ -356,9 +356,7 @@
 .mmenu__panel {
   position: absolute;
   inset: 0;
-  margin: 0 auto;
   width: 100%;
-  max-width: 560px; /* centered on wider screens, full-width on phones */
   height: 100%;
   background: #fff;
   display: flex;
