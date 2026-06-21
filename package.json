@@ -4,10 +4,13 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Garudas — premium e-commerce frontend (MERN-ready)",
+  "homepage": "https://altitude-technologies.github.io/Garudas",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "framer-motion": "^11.3.21",
@@ -17,6 +20,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
+    "gh-pages": "^6.3.0",
     "puppeteer-core": "^23.11.1",
     "vite": "^5.4.2"
   }

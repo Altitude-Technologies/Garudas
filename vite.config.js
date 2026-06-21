@@ -3,10 +3,10 @@ import react from '@vitejs/plugin-react'
 
 // MERN-ready: client lives in this folder; a future /server (Express + MongoDB)
 // can be proxied through here during development.
-export default defineConfig({
-  // For GitHub Pages project sites the app is served from /<repo>/.
-  // The deploy workflow sets VITE_BASE=/<repo>/; locally it stays "/".
-  base: process.env.VITE_BASE || '/',
+export default defineConfig(({ command }) => ({
+  // GitHub Pages serves this project site from /Garudas/. Build uses that base
+  // (so `npm run deploy` works); dev stays at "/". VITE_BASE can override.
+  base: process.env.VITE_BASE || (command === 'build' ? '/Garudas/' : '/'),
   plugins: [react()],
   server: {
     port: 5173,
@@ -18,4 +18,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))
