@@ -6,12 +6,9 @@ import { NAV } from '../../lib/products.js'
 import './Header.css'
 
 const SOCIALS = [
-  { label: 'Facebook', d: 'M13 3h3V0h-3a4 4 0 0 0-4 4v2H6v3h3v7h3V9h3l1-3h-4V4a1 1 0 0 1 1-1z' },
-  {
-    label: 'Instagram',
-    d: 'M8 0h4c2.2 0 4 1.8 4 4v4c0 2.2-1.8 4-4 4H8c-2.2 0-4-1.8-4-4V4c0-2.2 1.8-4 4-4zm0 2C6.9 2 6 2.9 6 4v4c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H8zm2 2.2A2.8 2.8 0 1 1 7.2 7 2.8 2.8 0 0 1 10 4.2zm0 1.6A1.2 1.2 0 1 0 11.2 7 1.2 1.2 0 0 0 10 5.8zm3-.3a.7.7 0 1 1-.7.7.7.7 0 0 1 .7-.7z',
-  },
-  { label: 'YouTube', d: 'M15.6 4.2c-.2-.7-.7-1.2-1.4-1.4C13 2.5 8 2.5 8 2.5s-5 0-6.2.3C1.1 3 .6 3.5.4 4.2 0 5.4 0 8 0 8s0 2.6.4 3.8c.2.7.7 1.2 1.4 1.4 1.2.3 6.2.3 6.2.3s5 0 6.2-.3c.7-.2 1.2-.7 1.4-1.4C16 10.6 16 8 16 8s0-2.6-.4-3.8zM6.4 10.3V5.7L10.4 8z' },
+  { label: 'Facebook', icon: 'fa-brands fa-facebook-f' },
+  { label: 'Instagram', icon: 'fa-brands fa-instagram' },
+  { label: 'YouTube', icon: 'fa-brands fa-youtube' },
 ]
 
 export default function Header() {
@@ -36,9 +33,7 @@ export default function Header() {
           <div className="topbar__socials">
             {SOCIALS.map((s) => (
               <a key={s.label} href="#top" aria-label={s.label} className="topbar__social">
-                <svg viewBox="0 0 16 16" width="15" height="15">
-                  <path fill="currentColor" d={s.d} />
-                </svg>
+                <i className={s.icon} aria-hidden="true" />
               </a>
             ))}
           </div>

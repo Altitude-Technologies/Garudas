@@ -23,6 +23,10 @@
   gap: 14px;
 }
 .topbar__social {
+  display: inline-flex;
+  align-items: center;
+  font-size: 15px;
+  line-height: 1;
   opacity: 0.9;
   transition: opacity 0.25s, transform 0.25s;
 }

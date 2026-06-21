@@ -336,18 +336,8 @@ export function HowItsMade() {
 
 /* ----------------------------------------------------- SOCIAL WALL (BENTO) */
 function PlatformIcon({ platform }) {
-  if (platform === 'youtube') {
-    return (
-      <svg viewBox="0 0 24 24" width="15" height="15">
-        <path fill="currentColor" d="M23 7.5a3 3 0 0 0-2.1-2.1C19 5 12 5 12 5s-7 0-8.9.4A3 3 0 0 0 1 7.5 31 31 0 0 0 .6 12 31 31 0 0 0 1 16.5a3 3 0 0 0 2.1 2.1C5 19 12 19 12 19s7 0 8.9-.4a3 3 0 0 0 2.1-2.1A31 31 0 0 0 23.4 12 31 31 0 0 0 23 7.5zM9.8 15V9l5.2 3z" />
-      </svg>
-    )
-  }
-  return (
-    <svg viewBox="0 0 24 24" width="15" height="15">
-      <path fill="currentColor" d="M12 2c2.7 0 3 0 4.1.1 1 0 1.6.2 2 .4.5.2.9.5 1.3.9.4.4.7.8.9 1.3.2.4.3 1 .4 2C20.9 7.9 21 8.3 21 11v2c0 2.7 0 3-.1 4.1 0 1-.2 1.6-.4 2a3.5 3.5 0 0 1-.9 1.3c-.4.4-.8.7-1.3.9-.4.2-1 .3-2 .4-1.1.1-1.4.1-4.1.1s-3 0-4.1-.1c-1 0-1.6-.2-2-.4a3.5 3.5 0 0 1-1.3-.9 3.5 3.5 0 0 1-.9-1.3c-.2-.4-.3-1-.4-2C3.1 16.1 3 15.7 3 13v-2c0-2.7 0-3 .1-4.1 0-1 .2-1.6.4-2 .2-.5.5-.9.9-1.3.4-.4.8-.7 1.3-.9.4-.2 1-.3 2-.4C8.9 2 9.3 2 12 2zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 1.8a3.2 3.2 0 1 1 0 6.4 3.2 3.2 0 0 1 0-6.4zM17.2 6a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z" />
-    </svg>
-  )
+  const cls = platform === 'youtube' ? 'fa-brands fa-youtube' : 'fa-brands fa-instagram'
+  return <i className={cls} aria-hidden="true" />
 }
 
 // A bento mosaic "social wall": mixed tile sizes that auto-pack, each with a

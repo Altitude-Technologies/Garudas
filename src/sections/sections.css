@@ -1024,6 +1024,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
+  font-size: 13px;
   color: var(--ink);
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(4px);
@@ -1219,6 +1220,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
+  font-size: 15px;
   color: #fff;
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.2);
