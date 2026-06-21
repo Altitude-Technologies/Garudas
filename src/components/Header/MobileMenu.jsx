@@ -24,7 +24,8 @@ export default function MobileMenu({ open, onClose }) {
   return (
     <div className={`mmenu ${open ? 'is-open' : ''}`} aria-hidden={!open}>
       <div className="mmenu__scrim" onClick={onClose} />
-      <aside className="mmenu__panel" role="dialog" aria-label="Menu">
+      {/* data-lenis-prevent lets the panel scroll natively while Lenis is active */}
+      <aside className="mmenu__panel" role="dialog" aria-label="Menu" data-lenis-prevent>
         <div className="mmenu__head">
           <Logo height={36} />
           <button className="mmenu__close" onClick={onClose} aria-label="Close menu">
