@@ -52,51 +52,62 @@
   }
 }
 
-/* ---- Main nav bar ---- */
+/* ---- Main nav bar (spacious + curved float) ---- */
 .navbar {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: saturate(1.4) blur(12px);
-  border-bottom: 1px solid transparent;
-  transition: box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
+  transition: box-shadow 0.4s var(--ease);
 }
 .is-scrolled .navbar {
-  box-shadow: var(--shadow-sm);
-  border-color: var(--line);
+  box-shadow: 0 14px 36px rgba(26, 26, 26, 0.12);
 }
 .navbar__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 90px;
+  height: 98px;
   transition: height 0.4s var(--ease);
 }
 .is-scrolled .navbar__inner {
-  height: 74px;
+  height: 80px;
 }
 
+/* Plain, spread-out text links (no pill) */
 .nav {
   display: flex;
-  gap: 8px;
-  background: var(--cream-2);
-  padding: 6px;
-  border-radius: 100px;
+  align-items: center;
+  gap: clamp(22px, 3vw, 50px);
 }
 .nav__item {
   position: relative;
-  padding: 11px 26px;
-  border-radius: 100px;
-  font-weight: 700;
-  font-size: 1.02rem;
+  padding: 8px 2px;
+  font-weight: 600;
+  font-size: 1.06rem;
   color: var(--ink);
-  transition: color 0.25s, background 0.3s var(--ease);
+  transition: color 0.25s var(--ease);
 }
-.nav__item:hover {
+.nav__item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s var(--ease);
+}
+.nav__item:hover,
+.nav__item.is-active {
   color: var(--red);
 }
-.nav__item.is-active {
-  background: var(--red);
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(225, 27, 34, 0.3);
+.nav__item:hover::after,
+.nav__item.is-active::after {
+  transform: scaleX(1);
 }
 
 .navbar__actions {
