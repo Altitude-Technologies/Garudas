@@ -110,6 +110,19 @@ h4 {
   font-weight: 800;
 }
 
+/* ---------------------------------------------------------------------------
+   Typography rule: ONLY section headings are bold (and brand red).
+   Every other piece of text renders at regular weight.
+   --------------------------------------------------------------------------- */
+* {
+  font-weight: 400 !important;
+}
+.section-title,
+.pickles__title {
+  font-weight: 800 !important;
+  color: var(--red) !important;
+}
+
 ::selection {
   background: var(--red);
   color: #fff;
