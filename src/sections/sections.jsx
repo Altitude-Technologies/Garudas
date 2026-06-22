@@ -46,16 +46,18 @@ function FIcon({ name }) {
   )
 }
 
-// Hand-drawn marker circle that wraps the title.
+// Clean oval outline that wraps the title.
 function Scribble() {
   return (
     <svg className="strip__circle" viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true">
-      <path
-        d="M223 13 C 150 1, 60 0, 32 19 C 6 36, 16 63, 92 73 C 178 84, 280 75, 296 47 C 308 25, 280 11, 205 11"
+      <ellipse
+        cx="150"
+        cy="40"
+        rx="147"
+        ry="37"
         fill="none"
         stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
+        strokeWidth="2.5"
         vectorEffect="non-scaling-stroke"
       />
     </svg>

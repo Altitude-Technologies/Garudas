@@ -406,7 +406,7 @@
   bottom: -7px;
   width: auto;
   height: auto;
-  color: var(--red);
+  color: var(--ink);
   overflow: visible;
 }
 .strip__sub {
