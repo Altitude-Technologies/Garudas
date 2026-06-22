@@ -354,6 +354,11 @@
   background: #fff;
   border-bottom: 1px solid var(--line);
 }
+/* Full-bleed: small side padding instead of the centered container */
+.strip .container {
+  max-width: none;
+  padding-inline: clamp(12px, 2vw, 28px);
+}
 .strip__inner {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -372,7 +377,7 @@
 }
 .strip__icon {
   flex: none;
-  color: var(--ink);
+  color: var(--red);
 }
 .strip__text {
   display: flex;
@@ -390,7 +395,7 @@
   font-size: 1.12rem;
   font-weight: 700 !important;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--red);
   white-space: nowrap;
 }
 .strip__circle {
