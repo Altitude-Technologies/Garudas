@@ -201,17 +201,17 @@ export const SHOP_CATEGORIES = [
 ]
 
 export const BESTSELLERS = [
-  { name: 'Arcot Biryani', mrp: 199, price: 169, save: '15% OFF' },
-  { name: 'Paneer Butter Masala', mrp: 199, price: 169, save: '15% OFF' },
-  { name: 'Chettinadu Biryani Mix', mrp: 199, price: 169, save: '15% OFF' },
-  { name: 'Instant Idly Batter Mix', mrp: 149, price: 129, save: '13% OFF' },
+  { name: 'Arcot Biryani', cat: 'Ready to Eat Meal', rating: 4.6, mrp: 199, price: 169, save: '15% OFF' },
+  { name: 'Paneer Butter Masala', cat: 'Ready to Eat Meal', rating: 4.8, mrp: 199, price: 169, save: '15% OFF' },
+  { name: 'Chettinadu Biryani Mix', cat: 'Ready to Eat Meal', rating: 3.8, mrp: 199, price: 169, save: '15% OFF' },
+  { name: 'Instant Idly Batter Mix', cat: 'Instant Indian Breakfast', rating: 4.7, mrp: 149, price: 129, save: '13% OFF' },
 ]
 
 export const MOST_LOVED = [
-  { name: 'Rice Pongal Mix', price: 159 },
-  { name: 'Mughal Biryani', price: 189 },
-  { name: 'Sambar Paste', price: 149 },
-  { name: 'Mysore Mutton Masala', price: 199 },
+  { name: 'Rice Pongal Mix', cat: 'Instant Breakfast', rating: 4.5, price: 159 },
+  { name: 'Mughal Biryani', cat: 'Ready to Eat Meal', rating: 4.7, price: 189 },
+  { name: 'Sambar Paste', cat: 'Culinary Base', rating: 4.6, price: 149 },
+  { name: 'Mysore Mutton Masala', cat: 'Culinary Base', rating: 4.8, price: 199 },
 ]
 
 export const PICKLES = [

@@ -12,7 +12,7 @@ import {
   MARKETPLACES,
 } from '../lib/products.js'
 
-const rupee = (n) => `₹${n}`
+const rupee = (n) => `₹${n}.00`
 
 const CAT_IMG = {
   'All Products': IMG.thali,
@@ -183,23 +183,29 @@ export function ShopByCategory() {
 
 /* --------------------------------------------------- PRODUCT CARD + GRID */
 function ProductCard({ p, delay = 0 }) {
+  const rating = p.rating ?? 4.8
+  const cat = p.cat ?? 'Garudas Kitchen'
   return (
     <Reveal delay={delay} className="pcard card">
       <div className="pcard__img">
         {p.save && <span className="chip pcard__save">{p.save}</span>}
+        <span className="pcard__rate">
+          <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
+            <path fill="#f5a623" d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" />
+          </svg>
+          {rating}
+        </span>
         <img src={p.img || imageFor(p.name)} alt={p.name} loading="lazy" />
-        <button className="pcard__add">
-          Add to Cart
-          <span>+</span>
-        </button>
+        <button className="pcard__choose">Choose options</button>
       </div>
       <div className="pcard__body">
-        <div className="pcard__rate">★★★★★ <i>(4.9)</i></div>
-        <h4>{p.name}</h4>
+        <span className="pcard__cat">{cat}</span>
+        <h4 className="pcard__name">{p.name}</h4>
         <div className="pcard__price">
+          <span className="pcard__from">From</span>
           <span className="pcard__now">{rupee(p.price)}</span>
-          {p.mrp && <span className="pcard__mrp">{rupee(p.mrp)}</span>}
         </div>
+        {p.mrp && <span className="pcard__mrp">{rupee(p.mrp)}</span>}
       </div>
     </Reveal>
   )
