@@ -213,7 +213,7 @@ function ProductCard({ p, delay = 0 }) {
 
 export function Bestsellers() {
   return (
-    <section className="block block--tint">
+    <section className="block block--tint block--wide">
       <div className="container">
         <div className="block__head">
           <div>
@@ -256,7 +256,7 @@ export function MarqueeBand() {
 
 export function MostLoved() {
   return (
-    <section className="block">
+    <section className="block block--wide">
       <div className="container">
         <div className="block__head">
           <div>

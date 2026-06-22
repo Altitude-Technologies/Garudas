@@ -422,6 +422,11 @@
 .block--tint {
   background: var(--cream-2);
 }
+/* Wide product grids: reduced side padding so cards grow larger */
+.block--wide .container {
+  max-width: none;
+  padding-inline: clamp(16px, 2.5vw, 40px);
+}
 .block__head {
   display: flex;
   align-items: flex-end;
