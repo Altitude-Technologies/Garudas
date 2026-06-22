@@ -61,10 +61,16 @@ export function ShopByCategory() {
           <h2 className="section-title">Shop By Category</h2>
           <div className="shopcat__nav">
             <button className="shopcat__btn" aria-label="Previous" onClick={() => scrollByCards(-1)}>
-              ‹
+              <span className="shopcat__swap">
+                <span className="a1"><Chevron dir="left" /></span>
+                <span className="a2"><Chevron dir="left" /></span>
+              </span>
             </button>
             <button className="shopcat__btn" aria-label="Next" onClick={() => scrollByCards(1)}>
-              ›
+              <span className="shopcat__swap">
+                <span className="a1"><Chevron dir="right" /></span>
+                <span className="a2"><Chevron dir="right" /></span>
+              </span>
             </button>
           </div>
         </div>
@@ -462,6 +468,15 @@ function Arrow() {
   return (
     <svg viewBox="0 0 24 24" width="16" height="16" style={{ verticalAlign: 'middle' }}>
       <path fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" d="M5 12h14m-6-6 6 6-6 6" />
+    </svg>
+  )
+}
+
+function Chevron({ dir }) {
+  const d = dir === 'left' ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6'
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20">
+      <path fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" d={d} />
     </svg>
   )
 }

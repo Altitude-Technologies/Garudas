@@ -422,6 +422,10 @@
 }
 
 /* ---- Shop by Category carousel ---- */
+/* Full-bleed: title + cards hug the left gutter (not the centered container). */
+.shopcat .container {
+  max-width: none;
+}
 .shopcat__head {
   display: flex;
   align-items: center;
@@ -441,22 +445,43 @@
   place-items: center;
   border: 1.5px solid var(--line);
   color: var(--ink);
-  font-size: 1.4rem;
-  line-height: 1;
-  background: #fff;
-  transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease),
-    transform 0.3s var(--ease);
+  background: transparent; /* no fill, even on hover */
+  transition: border-color 0.3s var(--ease);
 }
 .shopcat__btn:hover {
-  background: var(--red);
-  border-color: var(--red);
-  color: #fff;
-  transform: translateY(-2px);
+  border-color: var(--ink);
+}
+/* Arrow does a slow vertical swap on hover (top->bottom, reverses on leave) */
+.shopcat__swap {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+}
+.shopcat__swap .a1,
+.shopcat__swap .a2 {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition: transform 0.55s var(--ease);
+}
+.shopcat__swap .a1 {
+  transform: translateY(0);
+}
+.shopcat__swap .a2 {
+  transform: translateY(-100%);
+}
+.shopcat__btn:hover .shopcat__swap .a1 {
+  transform: translateY(100%);
+}
+.shopcat__btn:hover .shopcat__swap .a2 {
+  transform: translateY(0);
 }
 
 /* Rail bleeds to the right edge; first card lines up with the container. */
 .shopcat__rail {
-  --edge: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));
+  --edge: var(--gutter);
   display: flex;
   gap: 20px;
   overflow-x: auto;
