@@ -23,17 +23,60 @@ const CAT_IMG = {
 }
 
 /* --------------------------------------------------------- FEATURE STRIP */
+const FEAT_ICONS = ['leaf', 'star', 'clock', 'plane']
+
+function FIcon({ name }) {
+  const p = {
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.6,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+  }
+  const map = {
+    leaf: 'M5 21c0-8 6-14 16-15-1 9-7 15-16 15zM5 21c2-5 5-8 10-10',
+    star: 'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z',
+    clock: 'M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18zM12 7.5v5l3.2 2',
+    plane: 'M2 13l19-9-8.5 18-2.2-7.3z',
+  }
+  return (
+    <svg viewBox="0 0 24 24" width="30" height="30">
+      <path {...p} d={map[name]} />
+    </svg>
+  )
+}
+
+// Hand-drawn marker circle that wraps the title.
+function Scribble() {
+  return (
+    <svg className="strip__circle" viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true">
+      <path
+        d="M223 13 C 150 1, 60 0, 32 19 C 6 36, 16 63, 92 73 C 178 84, 280 75, 296 47 C 308 25, 280 11, 205 11"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
+  )
+}
+
 export function FeatureStrip() {
-  const ICONS = ['🌿', '👨‍🍳', '⏱️', '✈️']
   return (
     <section className="strip">
       <div className="container strip__inner">
         {HIGHLIGHTS.map((h, i) => (
           <Reveal key={h.title} delay={i * 0.06} className="strip__item">
-            <span className="strip__icon">{ICONS[i]}</span>
-            <div>
-              <strong>{h.title}</strong>
-              <span>{h.sub}</span>
+            <span className="strip__icon">
+              <FIcon name={FEAT_ICONS[i]} />
+            </span>
+            <div className="strip__text">
+              <span className="strip__titlewrap">
+                <span className="strip__title">{h.title}</span>
+                <Scribble />
+              </span>
+              <span className="strip__sub">{h.sub}</span>
             </div>
           </Reveal>
         ))}
