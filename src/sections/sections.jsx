@@ -44,31 +44,56 @@ export function FeatureStrip() {
 
 /* ------------------------------------------------------ SHOP BY CATEGORY */
 export function ShopByCategory() {
+  const railRef = useRef(null)
+
+  const scrollByCards = (dir) => {
+    const rail = railRef.current
+    if (!rail) return
+    const card = rail.querySelector('.catcard')
+    const step = card ? card.offsetWidth + 20 : 360
+    rail.scrollBy({ left: dir * step, behavior: 'smooth' })
+  }
+
   return (
-    <section className="block" id="shop">
+    <section className="shopcat block" id="shop">
       <div className="container">
-        <div className="block__head">
-          <div>
-            <span className="eyebrow">Browse</span>
-            <h2 className="section-title">Shop by Category</h2>
+        <div className="shopcat__head">
+          <h2 className="section-title">Shop By Category</h2>
+          <div className="shopcat__nav">
+            <button className="shopcat__btn" aria-label="Previous" onClick={() => scrollByCards(-1)}>
+              ‹
+            </button>
+            <button className="shopcat__btn" aria-label="Next" onClick={() => scrollByCards(1)}>
+              ›
+            </button>
           </div>
-          <a href="#shop" className="block__link">
-            View all <Arrow />
+        </div>
+      </div>
+
+      <div className="shopcat__rail" ref={railRef} data-lenis-prevent>
+        {SHOP_CATEGORIES.map((c) => (
+          <a href="#shop" key={c.name} className="catcard">
+            <img className="catcard__img" src={CAT_IMG[c.name] || imageFor(c.name)} alt={c.name} loading="lazy" />
+            <span className="catcard__overlay" />
+            <div className="catcard__body">
+              <div>
+                <h3 className="catcard__title">
+                  {c.name}
+                  {c.count != null && <sup>{c.count}</sup>}
+                </h3>
+                <p className="catcard__note">{c.note}</p>
+              </div>
+              <span className="catcard__arrow">
+                <span className="a1">
+                  <Arrow />
+                </span>
+                <span className="a2">
+                  <Arrow />
+                </span>
+              </span>
+            </div>
           </a>
-        </div>
-        <div className="cats">
-          {SHOP_CATEGORIES.map((c, i) => (
-            <Reveal key={c.name} delay={i * 0.05} className="cat">
-              <div className="cat__img">
-                <img src={CAT_IMG[c.name] || imageFor(c.name)} alt={c.name} loading="lazy" />
-              </div>
-              <div className="cat__body">
-                <strong>{c.name}</strong>
-                <span>{c.note}</span>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        ))}
       </div>
     </section>
   )

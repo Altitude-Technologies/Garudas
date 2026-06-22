@@ -193,11 +193,11 @@ export const CATALOGUE = {
 // ---- Homepage curated lists (Landing page.png) -----------------------------
 
 export const SHOP_CATEGORIES = [
-  { name: 'All Products', note: 'Explore the full Garudas range' },
-  { name: 'Instant Foods', note: 'Ready in 5 minutes' },
-  { name: 'Beverages', note: 'Trooz & CSD coolers' },
-  { name: 'Organic Farms', note: 'Straight from the soil' },
-  { name: 'Combos', note: 'Curated value packs' },
+  { name: 'All Products', count: 101, note: 'Explore the full Garudas range' },
+  { name: 'Instant Foods', count: 51, note: 'Ready in 5 minutes' },
+  { name: 'Beverages', count: 14, note: 'Trooz & CSD coolers' },
+  { name: 'Organic Farms', count: 36, note: 'Straight from the soil' },
+  { name: 'Combos', count: 12, note: 'Curated value packs' },
 ]
 
 export const BESTSELLERS = [
