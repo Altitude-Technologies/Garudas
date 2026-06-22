@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Reveal from '../components/Reveal.jsx'
 import { IMG, imageFor } from '../lib/images.js'
 import { SOCIAL, SOCIAL_HANDLE } from '../lib/social.js'
@@ -45,6 +45,27 @@ export function FeatureStrip() {
 /* ------------------------------------------------------ SHOP BY CATEGORY */
 export function ShopByCategory() {
   const railRef = useRef(null)
+  const [atStart, setAtStart] = useState(true)
+  const [atEnd, setAtEnd] = useState(false)
+
+  const update = () => {
+    const r = railRef.current
+    if (!r) return
+    setAtStart(r.scrollLeft <= 1)
+    setAtEnd(r.scrollLeft + r.clientWidth >= r.scrollWidth - 1)
+  }
+
+  useEffect(() => {
+    update()
+    const r = railRef.current
+    if (!r) return
+    r.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      r.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
 
   const scrollByCards = (dir) => {
     const rail = railRef.current
@@ -60,13 +81,23 @@ export function ShopByCategory() {
         <div className="shopcat__head">
           <h2 className="section-title">Shop By Category</h2>
           <div className="shopcat__nav">
-            <button className="shopcat__btn" aria-label="Previous" onClick={() => scrollByCards(-1)}>
+            <button
+              className="shopcat__btn"
+              aria-label="Previous"
+              onClick={() => scrollByCards(-1)}
+              disabled={atStart}
+            >
               <span className="shopcat__swap">
                 <span className="a1"><Chevron dir="left" /></span>
                 <span className="a2"><Chevron dir="left" /></span>
               </span>
             </button>
-            <button className="shopcat__btn" aria-label="Next" onClick={() => scrollByCards(1)}>
+            <button
+              className="shopcat__btn"
+              aria-label="Next"
+              onClick={() => scrollByCards(1)}
+              disabled={atEnd}
+            >
               <span className="shopcat__swap">
                 <span className="a1"><Chevron dir="right" /></span>
                 <span className="a2"><Chevron dir="right" /></span>

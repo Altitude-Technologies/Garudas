@@ -469,6 +469,18 @@
 .shopcat__btn:hover::before {
   transform: scale(1.6);
 }
+/* Disabled (no more scroll in that direction) — faded, no hover bloom */
+.shopcat__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.shopcat__btn:disabled:hover {
+  border-color: var(--line);
+  color: var(--ink);
+}
+.shopcat__btn:disabled:hover::before {
+  transform: scale(0);
+}
 /* Arrow does a slow vertical swap on hover (top->bottom, reverses on leave) */
 .shopcat__swap {
   position: relative;
