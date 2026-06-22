@@ -438,6 +438,8 @@
   gap: 12px;
 }
 .shopcat__btn {
+  position: relative;
+  overflow: hidden;
   width: 52px;
   height: 52px;
   border-radius: 50%;
@@ -446,16 +448,29 @@
   border: 1.5px solid var(--line);
   color: var(--ink);
   background: transparent;
-  transition: background 0.4s var(--ease), border-color 0.4s var(--ease), color 0.4s var(--ease);
+  transition: border-color 0.45s var(--ease), color 0.45s var(--ease);
+}
+/* Red fill slides in top->bottom on hover, recedes bottom->top on leave */
+.shopcat__btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--red);
+  transform: translateY(-100%);
+  transition: transform 0.45s var(--ease);
 }
 .shopcat__btn:hover {
-  background: var(--red);
   border-color: var(--red);
   color: #fff;
+}
+.shopcat__btn:hover::before {
+  transform: translateY(0);
 }
 /* Arrow does a slow vertical swap on hover (top->bottom, reverses on leave) */
 .shopcat__swap {
   position: relative;
+  z-index: 1;
   width: 20px;
   height: 20px;
   overflow: hidden;
