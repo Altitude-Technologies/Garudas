@@ -66,18 +66,14 @@
 }
 .pp__thumbs {
   height: 100%;
-  overflow-y: auto;
-  scrollbar-width: none;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-.pp__thumbs::-webkit-scrollbar {
-  display: none;
-}
 .pp__thumbs img {
   width: 100%;
-  flex: none;
+  flex: 1; /* 4 thumbs share the panel height equally — all fit, no inner scroll */
+  min-height: 0;
   aspect-ratio: 3 / 3.5;
   object-fit: cover;
   border-radius: var(--r);
