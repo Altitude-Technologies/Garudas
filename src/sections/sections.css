@@ -2233,13 +2233,19 @@
 .qv__media {
   position: relative;
   background: linear-gradient(160deg, var(--cream-2), var(--cream-3));
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: clamp(20px, 4vw, 48px);
+  overflow: hidden;
+  min-height: 0;
 }
 .qv__media img {
   max-width: 100%;
   max-height: 100%;
+  min-height: 0;
+  width: auto;
+  height: auto;
   object-fit: contain;
   border-radius: var(--r);
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.18));
