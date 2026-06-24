@@ -255,7 +255,16 @@ function ProductCard({ p, delay = 0 }) {
         onPointerLeave={reset}
       >
         {p.save && <span className="chip pcard__save">{p.save}</span>}
-        <span className="pcard__rate">
+        <button
+          type="button"
+          className="pcard__rate"
+          aria-label={`Quick view — ${p.name}`}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation()
+            window.dispatchEvent(new CustomEvent('quickview', { detail: p }))
+          }}
+        >
           <span className="pcard__rate-face pcard__rate-stars">
             <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
               <path fill="#f5a623" d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" />
@@ -275,7 +284,7 @@ function ProductCard({ p, delay = 0 }) {
               <circle cx="12" cy="12" r="2.6" fill="currentColor" />
             </svg>
           </span>
-        </span>
+        </button>
 
         <div className="pcard__gallery">
           {gallery.map((src, i) => (
