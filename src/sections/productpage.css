@@ -7,26 +7,27 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
-.pp__bar {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
-  padding: 14px clamp(16px, 4vw, 48px);
-}
-.pp__back {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
+.pp__close {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
   color: var(--ink);
-  transition: color 0.25s, gap 0.25s;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.25s, color 0.25s, transform 0.25s, border-color 0.25s;
 }
-.pp__back:hover {
-  color: var(--red);
-  gap: 12px;
+.pp__close:hover {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+  transform: rotate(90deg);
 }
 
 /* Wider page, smaller side padding so images are larger */
@@ -54,9 +55,9 @@
 /* Main image fits the screen and stays fixed. */
 .pp__main {
   position: sticky;
-  top: 90px;
+  top: 22px;
   align-self: start;
-  height: calc(100vh - 110px);
+  height: calc(100vh - 44px);
 }
 .pp__main img {
   width: 100%;
@@ -69,7 +70,7 @@
    level with the content (sticky element ~ half the content height). */
 .pp__thumbs {
   position: sticky;
-  top: 90px;
+  top: 22px;
   align-self: start;
   height: 50%;
   display: flex;
