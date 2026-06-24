@@ -2,6 +2,7 @@ import Header from './components/Header/Header.jsx'
 import Footer from './sections/Footer.jsx'
 import HeroCarousel from './sections/HeroCarousel.jsx'
 import QuickView from './sections/QuickView.jsx'
+import ProductPage from './sections/ProductPage.jsx'
 import { useLenis } from './hooks/useLenis.js'
 import { useRevealHeadings } from './hooks/useRevealHeadings.js'
 import {
@@ -47,6 +48,7 @@ export default function App() {
         <Footer />
       </main>
       <QuickView />
+      <ProductPage />
     </>
   )
 }
