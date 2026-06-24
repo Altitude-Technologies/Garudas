@@ -37,43 +37,39 @@
 /* Two columns: [gallery] [content]. The gallery has its own [main | thumbs].
    The main image sticks WITHIN the gallery, so it releases exactly where the
    thumbnails end — then only the content keeps scrolling. */
+/* 3 columns: [main] [thumbs] [content]. The main image is sticky across the
+   WHOLE content height, so it stays fixed. The thumbnails scroll up with the
+   page and end early; the content keeps scrolling; at the bottom the main
+   image releases so it ends level with the content. */
 .pp__grid {
   display: grid;
-  grid-template-columns: 1.45fr 1fr;
-  gap: clamp(16px, 2vw, 30px);
+  grid-template-columns: 1.3fr 0.5fr 1fr;
+  gap: clamp(14px, 1.6vw, 26px);
   align-items: start;
   padding-block: clamp(16px, 2vw, 28px) 80px;
 }
-/* Sticky fixed-height panel — stays pinned, does NOT grow with the content.
-   Big image fills it; the thumbnails scroll within this fixed height. */
 .pp__gallery {
-  position: sticky;
-  top: 90px;
-  height: calc(100vh - 120px);
-  display: grid;
-  grid-template-columns: 1.5fr 0.55fr;
-  gap: 14px;
+  display: contents;
 }
 .pp__main {
-  height: 100%;
+  position: sticky;
+  top: 90px;
+  align-self: start;
 }
 .pp__main img {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-sm);
 }
 .pp__thumbs {
-  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 .pp__thumbs img {
   width: 100%;
-  flex: 1; /* 4 thumbs share the panel height equally — all fit, no inner scroll */
-  min-height: 0;
   aspect-ratio: 3 / 3.5;
   object-fit: cover;
   border-radius: var(--r);
@@ -551,12 +547,8 @@
   .pp__grid {
     grid-template-columns: 1fr;
   }
-  .pp__gallery {
-    position: static;
-    height: auto;
-    grid-template-columns: 1fr;
-  }
   .pp__main {
+    position: static;
     height: auto;
   }
   .pp__main img {
