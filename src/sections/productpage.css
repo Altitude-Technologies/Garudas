@@ -44,31 +44,40 @@
   align-items: start;
   padding-block: clamp(16px, 2vw, 28px) 80px;
 }
+/* Sticky fixed-height panel — stays pinned, does NOT grow with the content.
+   Big image fills it; the thumbnails scroll within this fixed height. */
 .pp__gallery {
-  display: grid;
-  grid-template-columns: 1.5fr 0.55fr;
-  gap: 16px;
-  align-items: start;
-}
-.pp__main {
   position: sticky;
   top: 90px;
-  align-self: start;
+  height: calc(100vh - 120px);
+  display: grid;
+  grid-template-columns: 1.5fr 0.55fr;
+  gap: 14px;
+}
+.pp__main {
+  height: 100%;
 }
 .pp__main img {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  height: 100%;
   object-fit: cover;
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-sm);
 }
 .pp__thumbs {
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+}
+.pp__thumbs::-webkit-scrollbar {
+  display: none;
 }
 .pp__thumbs img {
   width: 100%;
+  flex: none;
   aspect-ratio: 3 / 3.5;
   object-fit: cover;
   border-radius: var(--r);
@@ -547,18 +556,22 @@
     grid-template-columns: 1fr;
   }
   .pp__gallery {
+    position: static;
+    height: auto;
     grid-template-columns: 1fr;
   }
   .pp__main {
-    position: static;
+    height: auto;
+  }
+  .pp__main img {
+    height: auto;
+    aspect-ratio: 4 / 5;
   }
   .pp__thumbs {
-    flex-direction: row;
+    height: auto;
     overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .pp__thumbs::-webkit-scrollbar {
-    display: none;
+    overflow-y: visible;
+    flex-direction: row;
   }
   .pp__thumbs img {
     flex: 0 0 40%;
