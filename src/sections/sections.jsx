@@ -87,6 +87,52 @@ export function FeatureStrip() {
   )
 }
 
+/* ------------------------------------------------- GARUDAS PROMISE (6) */
+const PROMISE_ICONS = {
+  leaf: 'M5 21c0-8 6-14 16-15-1 9-7 15-16 15zM5 21c2-5 5-8 10-10',
+  droplet: 'M12 3s6 6 6 11a6 6 0 0 1-12 0c0-5 6-11 6-11z',
+  home: 'M3 11l9-8 9 8M5 10v10h14V10',
+  box: 'M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8',
+  palette:
+    'M12 3a9 9 0 1 0 0 18c1.2 0 2-1 2-2 0-1.5-1.4-1.6-1.4-3A1.6 1.6 0 0 1 14.2 14H16a5 5 0 0 0 5-5c0-3.3-4-6-9-6zM7.5 13.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM9.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM14.5 8.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z',
+  crown: 'M3 7l4 5 5-7 5 7 4-5-2 13H5z',
+}
+
+const VALUE_PROPS = [
+  { icon: 'leaf', title: 'No Preservatives', sub: '100% natural — nothing added', color: '#16a34a' },
+  { icon: 'droplet', title: 'No Additives', sub: 'Pure, clean ingredients', color: '#0891b2' },
+  { icon: 'home', title: 'Home-Made Taste', sub: 'Traditional family recipes', color: '#ca8a04' },
+  { icon: 'box', title: 'Japanese Retort Tech', sub: 'Locks in freshness', color: '#4f46e5' },
+  { icon: 'palette', title: 'No Artificial Colours', sub: 'No synthetic colours or flavours', color: '#db2777' },
+  { icon: 'crown', title: 'Premium Products', sub: 'Crafted to the finest standard', color: '#9333ea' },
+]
+
+export function GarudasPromise() {
+  return (
+    <section className="vprop">
+      <div className="vprop__inner">
+        {VALUE_PROPS.map((v, i) => (
+          <Reveal key={v.title} delay={i * 0.05} className="vprop__item" style={{ '--c': v.color }}>
+            <div className="vprop__zoom">
+              <span className="vprop__icon">
+                <svg viewBox="0 0 24 24" width="26" height="26">
+                  <path d={PROMISE_ICONS[v.icon]} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <div className="vprop__text">
+                <span className="vprop__titlewrap">
+                  <span className="vprop__title">{v.title}</span>
+                </span>
+                <span className="vprop__sub">{v.sub}</span>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 /* ------------------------------------------------------ SHOP BY CATEGORY */
 export function ShopByCategory() {
   const railRef = useRef(null)
@@ -317,7 +363,7 @@ export function MarqueeBand() {
           <div className="marquee__group" key={k}>
             {words.map((w) => (
               <span key={w} className="marquee__word">
-                {w} <i>✦</i>
+                {w} <i>•</i>
               </span>
             ))}
           </div>
@@ -358,12 +404,19 @@ export function MostLoved() {
 }
 
 /* ------------------------------------------------------------ WHY DIFFERENT */
+const WHY_ICONS = {
+  snow: 'M12 2v20M4 7l16 10M20 7L4 17M12 2l-3 3m3-3 3 3M12 22l-3-3m3 3 3-3M4 7l.3-4M4 7 1 8m19-1-.3-4M20 7l3 1M4 17l-3 1m3-1 .3 4m15.7-4 3-1m-3 1-.3 4',
+  mountain: 'M3 20h18L14 7l-4 6-2-3-5 10zM14 7l3-4 4 7',
+  luggage: 'M6 8h12l-.7 12.2a2 2 0 0 1-2 1.8H8.7a2 2 0 0 1-2-1.8zM9 8V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3M10 12v6M14 12v6',
+  bowl: 'M3 11h18a9 9 0 0 1-18 0zM7 11c0-3 2-5 5-5s5 2 5 5M12 3v1',
+}
+
 export function WhyDifferent() {
   const points = [
-    ['🧊', 'Freeze-Dried, Not Just Instant', 'Locks in up to 97% of nutrition — unlike ordinary instant food that loses most of it.'],
-    ['⛰️', 'Works Anywhere, No Fridge Needed', 'From hostels to Himalayan treks — no refrigeration, no cooking setup required.'],
-    ['📦', 'Carry-On Friendly', 'Each meal weighs under 100g. Fits in any bag. Won’t add a gram to your luggage limit.'],
-    ['🍛', '60+ Authentic Indian Dishes', 'From Dal Makhani to Mysore Mutton — recipes crafted by master chefs from across India.'],
+    ['snow', 'Freeze-Dried, Not Just Instant', 'Locks in up to 97% of nutrition — unlike ordinary instant food that loses most of it.'],
+    ['mountain', 'Works Anywhere, No Fridge Needed', 'From hostels to Himalayan treks — no refrigeration, no cooking setup required.'],
+    ['luggage', 'Carry-On Friendly', 'Each meal weighs under 100g. Fits in any bag. Won’t add a gram to your luggage limit.'],
+    ['bowl', '60+ Authentic Indian Dishes', 'From Dal Makhani to Mysore Mutton — recipes crafted by master chefs from across India.'],
   ]
   return (
     <section className="why" id="why">
@@ -376,7 +429,11 @@ export function WhyDifferent() {
           <ul className="why__list">
             {points.map(([icon, t, d], i) => (
               <Reveal as="li" key={t} delay={i * 0.07}>
-                <span className="why__emoji">{icon}</span>
+                <span className="why__icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22">
+                    <path d={WHY_ICONS[icon]} fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
                 <div>
                   <strong>{t}</strong>
                   <p>{d}</p>

@@ -10,6 +10,7 @@ export default defineConfig(({ command }) => ({
   plugins: [react()],
   server: {
     port: 5173,
+    strictPort: true, // always use 5173 — never auto-increment to a new port
     open: true,
     proxy: {
       '/api': {

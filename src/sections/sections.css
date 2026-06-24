@@ -349,6 +349,91 @@
   }
 }
 
+/* ===================================================== GARUDAS PROMISE
+   Horizontal feature strip — line icon + oval-marked title + subtitle,
+   each item in its own colour, separated by vertical dividers. */
+.vprop {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.vprop__inner {
+  max-width: none;
+  padding-inline: clamp(8px, 1vw, 16px);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  padding-block: clamp(26px, 3vw, 40px);
+}
+.vprop__item {
+  display: flex;
+  justify-content: center;
+  padding: 8px 10px;
+}
+.vprop__item + .vprop__item {
+  border-left: 1px solid var(--line);
+}
+/* Inner wrapper carries the layout + hover zoom (the item itself holds the
+   framer-motion reveal transform, so the zoom lives here to avoid conflict). */
+.vprop__zoom {
+  display: flex;
+  align-items: flex-start; /* icon lines up with the title, not the sub */
+  gap: 10px;
+  transition: transform 0.4s var(--ease);
+}
+.vprop__item:hover .vprop__zoom {
+  transform: scale(1.18);
+}
+.vprop__icon {
+  flex: none;
+  margin-top: 3px; /* nudge so the icon centres on the title line */
+  color: var(--c, var(--ink)); /* each item its own colour */
+}
+.vprop__text {
+  display: flex;
+  flex-direction: column;
+}
+.vprop__titlewrap {
+  position: relative;
+  align-self: flex-start;
+}
+.vprop__title {
+  font-size: 0.95rem;
+  font-weight: 700 !important; /* override the global 400 */
+  letter-spacing: -0.015em;
+  color: var(--c, var(--ink)); /* each item its own colour */
+  white-space: nowrap;
+}
+.vprop__sub {
+  margin-top: 7px;
+  font-size: 0.8rem;
+  color: var(--ink-3);
+}
+/* ---- responsive: 6 → 3 → 2 columns, keeping clean dividers ---- */
+@media (max-width: 1200px) {
+  .vprop__inner {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 20px;
+  }
+  .vprop__item {
+    border-left: none;
+  }
+  .vprop__item:not(:nth-child(3n + 1)) {
+    border-left: 1px solid var(--line);
+  }
+}
+@media (max-width: 640px) {
+  .vprop__inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .vprop__item {
+    border-left: none;
+    justify-content: flex-start;
+  }
+  .vprop__item:nth-child(even) {
+    border-left: 1px solid var(--line);
+  }
+}
+
 /* =============================================================== STRIP */
 .strip {
   background: #fff;
@@ -1012,13 +1097,15 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35em;
-  font-size: clamp(2.2rem, 7vw, 5.2rem);
-  font-weight: 700 !important; /* override the global 400 so the outline reads bold */
-  /* Positive tracking keeps the hollow glyphs from overlapping — without it
-     adjacent letter outlines intersect and draw stray lines ("overwritten"). */
-  letter-spacing: 0.05em;
-  color: transparent;
-  -webkit-text-stroke: 1.4px rgba(225, 14, 18, 0.5);
+  font-size: clamp(2.8rem, 8vw, 5.6rem);
+  font-weight:900 !important; 
+  letter-spacing: 0;
+  /* Outlined letters that stay clean even where wide glyphs overlap: fill each
+     letter with the band's own colour and paint it OVER the stroke, so every
+     letter knocks out the previous letter's intruding outline. */
+  color: var(--cream);
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.6);
+  paint-order: stroke;
   padding: 0 0.55em;
   white-space: nowrap;
   transition: -webkit-text-stroke-color 0.35s var(--ease);
@@ -1031,7 +1118,9 @@
   color: var(--red);
   -webkit-text-stroke: 0;
   font-style: normal;
-  font-size: 0.5em;
+  font-size: 0.42em;
+  line-height: 1;
+  margin-left: 0.15em;
 }
 @keyframes marquee {
   to {
@@ -1079,10 +1168,16 @@
   display: flex;
   gap: 14px;
 }
-.why__emoji {
+.why__icon {
   flex: none;
-  font-size: 1.3rem;
-  line-height: 1.5;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--red);
+  background: var(--red-soft);
+  margin-top: 2px;
 }
 .why__list strong {
   font-size: 1.06rem;
@@ -1421,9 +1516,10 @@
 .show__rail::-webkit-scrollbar {
   display: none;
 }
-/* Exactly two cards per view; the right arrow pages to the next two. */
+/* Two cards in view plus a peek of the third, so the scroll is discoverable;
+   the right arrow pages to the next pair. */
 .show__rail .pcard {
-  flex: 0 0 calc((100% - 22px) / 2);
+  flex: 0 0 calc((100% - 104px) / 2);
   scroll-snap-align: start;
 }
 .show .pcard {
@@ -1968,11 +2064,13 @@
   white-space: nowrap;
   font-size: clamp(2.4rem, 10vw, 8.5rem);
   font-weight: 900 !important; /* bold (overrides the global 400) */
-  letter-spacing: -0.03em;
+  /* Positive tracking so the hollow glyph outlines don't overlap each other. */
+  letter-spacing: 0.16em;
   line-height: 0.9;
   padding-block: 8px 6px;
   background: #fff;
-  color: rgba(225, 14, 18, 0.2); /* light, faded red */
+  color: transparent; /* outlined "strike" letters — stroke only */
+  -webkit-text-stroke: 1.4px rgba(225, 14, 18, 0.5);
   user-select: none;
   pointer-events: none;
 }

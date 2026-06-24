@@ -4,7 +4,7 @@ import HeroCarousel from './sections/HeroCarousel.jsx'
 import { useLenis } from './hooks/useLenis.js'
 import { useRevealHeadings } from './hooks/useRevealHeadings.js'
 import {
-  FeatureStrip,
+  GarudasPromise,
   ShopByCategory,
   Bestsellers,
   MarqueeBand,
@@ -31,7 +31,7 @@ export default function App() {
       <Header />
       <main id="scroll-container">
         <HeroCarousel />
-        <FeatureStrip />
+        <GarudasPromise />
         <ShopByCategory />
         <Bestsellers />
         <MarqueeBand />

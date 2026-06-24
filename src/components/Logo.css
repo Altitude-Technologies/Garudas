@@ -5,6 +5,7 @@
 .logo img {
   width: auto;
   object-fit: contain;
+  transition: height 0.45s var(--ease); /* smooth shrink as the header collapses */
 }
 .logo__fallback {
   align-items: center;

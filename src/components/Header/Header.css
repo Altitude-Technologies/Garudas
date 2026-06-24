@@ -14,7 +14,7 @@
   /* Collapses away on scroll, leaving just the main nav bar. */
   max-height: 42px;
   opacity: 1;
-  transition: max-height 0.4s var(--ease), opacity 0.3s var(--ease);
+  transition: max-height 0.45s var(--ease), opacity 0.45s var(--ease);
 }
 .is-scrolled .topbar {
   max-height: 0;
@@ -71,7 +71,7 @@
   backdrop-filter: saturate(1.4) blur(12px);
   border-radius: 0 0 30px 30px;
   box-shadow: 0 10px 30px rgba(26, 26, 26, 0.06);
-  transition: box-shadow 0.4s var(--ease);
+  transition: box-shadow 0.45s var(--ease);
 }
 .is-scrolled .navbar {
   box-shadow: 0 14px 36px rgba(26, 26, 26, 0.12);
@@ -81,7 +81,7 @@
   align-items: center;
   justify-content: space-between;
   height: 98px;
-  transition: height 0.4s var(--ease);
+  transition: height 0.45s var(--ease);
   /* Full-width bar: logo hugs the left corner, actions hug the right corner. */
   max-width: none;
   padding-inline: clamp(12px, 1.4vw, 22px);
