@@ -53,7 +53,7 @@ export default function Header() {
 
       {/* ---- Main bar ---- */}
       <div className="navbar">
-        <div className="navbar__inner container">
+        <div className="navbar__inner">
           <Logo height={scrolled ? 44 : 54} />
 
           <nav className="nav">

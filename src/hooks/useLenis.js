@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import Lenis from 'lenis'
 
-// Premium momentum scrolling (à la bowlfulstore.com). The whole page body
-// scrolls smoothly; the fixed header sits outside the scrolled flow.
+
 export function useLenis() {
   useEffect(() => {
     const lenis = new Lenis({
@@ -10,6 +9,9 @@ export function useLenis() {
       smoothWheel: true,
       wheelMultiplier: 0.95,
       touchMultiplier: 1.5,
+      // Let the wheel scroll nested scrollable elements (e.g. the mega-menu
+      // dropdown) natively instead of always smooth-scrolling the page.
+      allowNestedScroll: true,
     })
 
     // Expose so UI (e.g. the mobile drawer) can pause/resume scrolling.

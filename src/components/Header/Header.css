@@ -10,6 +10,15 @@
 .topbar {
   background: var(--red);
   color: #fff;
+  overflow: hidden;
+  /* Collapses away on scroll, leaving just the main nav bar. */
+  max-height: 42px;
+  opacity: 1;
+  transition: max-height 0.4s var(--ease), opacity 0.3s var(--ease);
+}
+.is-scrolled .topbar {
+  max-height: 0;
+  opacity: 0;
 }
 .topbar__inner {
   display: grid;
@@ -73,6 +82,9 @@
   justify-content: space-between;
   height: 98px;
   transition: height 0.4s var(--ease);
+  /* Full-width bar: logo hugs the left corner, actions hug the right corner. */
+  max-width: none;
+  padding-inline: clamp(12px, 1.4vw, 22px);
 }
 .is-scrolled .navbar__inner {
   height: 80px;
@@ -88,7 +100,7 @@
   position: relative;
   padding: 8px 2px;
   font-weight: 600;
-  font-size: 1.06rem;
+  font-size: 0.92rem;
   color: var(--ink);
   transition: color 0.25s var(--ease);
 }
@@ -161,78 +173,82 @@
   border-top: 1px solid var(--line);
   box-shadow: 0 40px 60px rgba(26, 26, 26, 0.18);
   border-radius: 0 0 var(--r-lg) var(--r-lg);
-  overflow: hidden;
+  /* Cap the dropdown to the screen; tall categories (e.g. Organic Farms)
+     scroll inside the menu while short ones still fit without scrolling. */
+  max-height: calc(100vh - var(--header-h) - 16px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
 }
 .mega__panel {
-  display: grid;
-  grid-template-columns: 0.92fr 1.4fr;
-  gap: 40px;
-  padding: 34px var(--gutter) 24px;
+  padding: 26px var(--gutter) 24px;
 }
-.mega__heading {
-  font-size: 1.35rem;
+.mega__fhead-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 18px;
 }
-.mega__cols {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 26px 30px;
+.mega__heading {
+  font-size: 1.3rem;
 }
-.mega__colname {
+.mega__viewall {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--red);
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+.mega__viewall:hover {
+  opacity: 0.75;
+}
+
+/* ---- Products: one labelled row per category, scrolling horizontally ---- */
+.mega__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.mega__glabel {
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--red);
-  margin-bottom: 12px;
-}
-.mega__col ul {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-.mega__col a {
-  font-size: 0.92rem;
-  color: var(--ink-2);
-  font-weight: 600;
-  transition: color 0.2s, padding-left 0.25s var(--ease);
-}
-.mega__col a:hover {
-  color: var(--red);
-  padding-left: 6px;
-}
-
-/* ---- Featured cards panel ---- */
-.mega__featured {
-  background: linear-gradient(180deg, var(--cream-2), var(--cream-3));
-  border-radius: var(--r-lg);
-  padding: 22px;
-}
-.mega__fhead {
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin: 4px 0 14px;
-}
-.mega__fhead:nth-of-type(2) {
-  margin-top: 20px;
+  margin-bottom: 10px;
 }
 .mega__cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
   gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cream-3) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.mega__cards::-webkit-scrollbar {
+  height: 6px;
+}
+.mega__cards::-webkit-scrollbar-thumb {
+  background: var(--cream-3);
+  border-radius: 100px;
+}
+.mega__cards::-webkit-scrollbar-track {
+  background: transparent;
 }
 .mcard {
+  flex: 0 0 108px;
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 .mcard__img {
   position: relative;
   display: block;
-  border-radius: var(--r);
+  border-radius: var(--r-sm);
   overflow: hidden;
   background: #fff;
   box-shadow: var(--shadow-sm);
@@ -261,42 +277,11 @@
   border-radius: 100px;
 }
 .mcard__name {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--ink);
   text-align: center;
-  line-height: 1.25;
-}
-
-/* ---- Bottom strip ---- */
-.mega__strip {
-  background: var(--cream-2);
-  border-top: 1px solid var(--line);
-}
-.mega__strip-inner {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  padding-block: 16px;
-}
-.mega__hl {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--red);
-}
-.mega__hl div {
-  display: flex;
-  flex-direction: column;
-}
-.mega__hl strong {
-  font-size: 0.92rem;
-  color: var(--ink);
-}
-.mega__hl span {
-  font-size: 0.76rem;
-  color: var(--ink-3);
-  font-weight: 500;
+  line-height: 1.2;
 }
 
 /* ============================ RESPONSIVE ============================ */
@@ -309,11 +294,7 @@
     font-size: 0.9rem;
   }
   .mega__panel {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .mega__featured {
-    display: none;
+    padding: 22px var(--gutter) 20px;
   }
 }
 /* Hamburger appears once the desktop nav is hidden. */
@@ -341,9 +322,6 @@
   }
   .navbar__inner {
     height: 70px;
-  }
-  .mega__strip-inner {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 

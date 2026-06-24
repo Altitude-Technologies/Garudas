@@ -14,3 +14,6 @@ npm-debug.log*
 .vite
 .env
 .env.local
+
+# project archive
+Claude.zip

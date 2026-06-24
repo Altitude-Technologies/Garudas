@@ -419,8 +419,15 @@
 .block {
   padding-block: clamp(56px, 7.5vw, 104px);
 }
+/* Cream accent = the page's previous background colour, used on alternate
+   sections so the layout reads as white / cream / white stripes. */
 .block--tint {
-  background: var(--cream-2);
+  background: var(--cream);
+}
+/* Shop-by-category sits between the white feature strip and the white
+   bestsellers grid, so it takes the cream accent. */
+.shopcat {
+  background: var(--cream);
 }
 /* Wide product grids: reduced side padding so cards grow larger */
 .block--wide .container {
@@ -681,15 +688,44 @@
   aspect-ratio: 1;
   overflow: hidden;
   background: var(--cream-2);
+  touch-action: pan-y; /* let vertical scroll through while we read horizontal zones */
 }
-.pcard__img img {
+/* Bottom scrim so the dots / button stay legible over bright photography. */
+.pcard__img::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 42%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(15, 5, 5, 0.34), transparent);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.pcard:hover .pcard__img::after {
+  opacity: 1;
+}
+/* ---- Crossfade gallery (left·middle·right thirds → slide 1·2·3) ---- */
+.pcard__gallery {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.pcard__slide {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.7s var(--ease);
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 0.5s var(--ease), transform 0.7s var(--ease);
 }
-.pcard:hover .pcard__img img {
-  transform: scale(1.08);
+.pcard__slide.is-active {
+  opacity: 1;
+}
+.pcard:hover .pcard__slide.is-active {
+  transform: scale(1.06);
 }
 .pcard__save {
   position: absolute;
@@ -706,39 +742,169 @@
   top: 14px;
   right: 14px;
   z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
+  display: grid; /* stack the two faces in one cell so they can crossfade */
+  place-items: center;
+  width: 56px;
+  height: 30px;
   border-radius: 100px;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(4px);
   font-size: 0.78rem;
   color: var(--ink);
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: width 0.4s var(--ease), height 0.4s var(--ease), background 0.4s var(--ease);
 }
-/* "Choose options" — centred, appears on hover */
+/* Black fill that rises with a curved edge when the eye badge is hovered —
+   mirrors the "Choose options" button motion. */
+.pcard__rate::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 0;
+  width: 180%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--ink);
+  transform: translate(-50%, 100%);
+  transition: transform 0.7s var(--ease);
+}
+.pcard:hover .pcard__rate:hover::before {
+  transform: translate(-50%, 14%);
+}
+.pcard__rate-face {
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 1; /* sit above the rising red fill */
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease), color 0.35s var(--ease);
+}
+.pcard__rate-eye {
+  opacity: 0;
+  transform: scale(0.6);
+  width: 100%;
+  height: 100%;
+  gap: 0; /* single child — drop the star/score gap so it centres cleanly */
+  justify-content: center;
+  color: var(--ink);
+}
+.pcard__rate-eye svg {
+  display: block;
+}
+/* On card hover the stars fade out and the badge morphs into a round
+   quick-view eye button. */
+.pcard:hover .pcard__rate {
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  cursor: pointer; /* quick-view eye reads as clickable on hover */
+}
+.pcard:hover .pcard__rate-stars {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.pcard:hover .pcard__rate-eye {
+  opacity: 1;
+  transform: scale(1);
+}
+/* Eye turns white as the red fill rises under it. */
+.pcard:hover .pcard__rate:hover .pcard__rate-eye {
+  color: #fff;
+}
+/* "Choose options" — rests just below the image, slides up smoothly on hover */
 .pcard__choose {
   position: absolute;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(0.94);
+  bottom: 44px;
+  transform: translate(-50%, 26px);
   z-index: 3;
-  padding: 12px 22px;
+  padding: 12px 24px;
   border-radius: 100px;
-  background: rgba(26, 26, 26, 0.92);
-  backdrop-filter: blur(6px);
-  color: #fff;
+  background: #fff;
+  border: none;
+  color: var(--ink);
   font-size: 0.9rem;
+  font-weight: 600;
   white-space: nowrap;
+  overflow: hidden; /* clip the rising red fill to the pill */
   opacity: 0;
-  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), background 0.25s;
+  pointer-events: none;
+  box-shadow: 0 10px 24px rgba(15, 5, 5, 0.18);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease),
+    color 0.45s var(--ease);
+}
+/* Red fill: a wide circle parked below the button. On hover it rises up,
+   its curved top edge sweeping the colour from bottom to top (and back
+   down on leave). */
+.pcard__choose::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 0;
+  width: 170%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--red);
+  transform: translate(-50%, 100%);
+  transition: transform 0.8s var(--ease); /* slow so the curved sweep reads clearly */
+}
+.pcard__choose > span {
+  position: relative;
+  z-index: 1;
+}
+.pcard__choose:hover {
+  color: #fff; /* text flips to white as the red rises */
+}
+.pcard__choose:hover::before {
+  transform: translate(-50%, 18%);
 }
 .pcard:hover .pcard__choose {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, 0);
+  pointer-events: auto;
 }
-.pcard__choose:hover {
+
+/* ---- Carousel dots (bottom-centre); active dot widens to a red pill ---- */
+.pcard__dots {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+/* Reveal on hover, and always on touch devices (no hover to trigger it). */
+.pcard:hover .pcard__dots {
+  opacity: 1;
+}
+@media (hover: none) {
+  .pcard__dots {
+    opacity: 1;
+  }
+}
+.pcard__dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.6);
+  transition: width 0.3s var(--ease), background 0.3s var(--ease);
+}
+.pcard__dot.is-active {
+  width: 20px;
   background: var(--red);
 }
 .pcard__body {
@@ -752,15 +918,26 @@
   color: var(--ink-3);
   margin-bottom: 7px;
 }
+/* Name on the left, price block on the right — aligned on the first line. */
+.pcard__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
 .pcard__name {
   font-size: 1.08rem;
   color: var(--red);
   letter-spacing: -0.01em;
-  margin-bottom: 10px;
+}
+.pcard__pricewrap {
+  flex-shrink: 0;
+  text-align: right;
 }
 .pcard__price {
   display: flex;
   align-items: baseline;
+  justify-content: flex-end;
   gap: 6px;
 }
 .pcard__from {
@@ -779,6 +956,39 @@
   text-decoration: line-through;
 }
 
+/* --------- Most Loved: simple meal card (image · name · price) --------- */
+.mlcard {
+  display: flex;
+  flex-direction: column;
+}
+.mlcard__img {
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--cream-2);
+}
+.mlcard__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease);
+}
+.mlcard:hover .mlcard__img img {
+  transform: scale(1.06);
+}
+.mlcard__name {
+  margin-top: 16px;
+  font-size: 1.06rem;
+  color: var(--ink);
+}
+.mlcard__price {
+  margin-top: 7px;
+  color: var(--red);
+  font-weight: 700 !important;
+  font-size: 1.06rem;
+}
+
 /* ============================================================= MARQUEE */
 .marquee {
   overflow: hidden;
@@ -791,20 +1001,31 @@
   width: max-content;
   animation: marquee 30s linear infinite;
 }
+/* Pause the scroll on hover so the outlined text can be read clearly. */
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
 .marquee__group {
   display: flex;
 }
 .marquee__word {
   display: inline-flex;
   align-items: center;
-  gap: 0.3em;
+  gap: 0.35em;
   font-size: clamp(2.2rem, 7vw, 5.2rem);
-  font-weight: 900;
-  letter-spacing: -0.02em;
+  font-weight: 700 !important; /* override the global 400 so the outline reads bold */
+  /* Positive tracking keeps the hollow glyphs from overlapping — without it
+     adjacent letter outlines intersect and draw stray lines ("overwritten"). */
+  letter-spacing: 0.05em;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(225, 14, 18, 0.32);
-  padding: 0 0.35em;
+  -webkit-text-stroke: 1.4px rgba(225, 14, 18, 0.5);
+  padding: 0 0.55em;
   white-space: nowrap;
+  transition: -webkit-text-stroke-color 0.35s var(--ease);
+}
+/* On hover the outline goes full-strength brand red — crisp and clear. */
+.marquee:hover .marquee__word {
+  -webkit-text-stroke-color: var(--red);
 }
 .marquee__word i {
   color: var(--red);
@@ -820,85 +1041,70 @@
 
 /* ================================================================= WHY */
 .why {
-  padding-block: clamp(56px, 7.5vw, 110px);
+  padding-block: clamp(64px, 8vw, 130px);
+}
+/* Enlarged, near-full-width layout to match the reference scale. */
+.why .container {
+  max-width: min(1560px, 95vw);
 }
 .why__inner {
   display: grid;
-  grid-template-columns: 0.9fr 1fr;
-  gap: clamp(34px, 5vw, 80px);
-  align-items: center;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(40px, 5.5vw, 96px);
+  align-items: center; /* content sits in the vertical middle of the image */
 }
 .why__media {
   position: relative;
 }
 .why__media img {
   width: 100%;
-  aspect-ratio: 4 / 4.4;
+  aspect-ratio: 1 / 0.86; /* medium height — slightly landscape, not tall */
   object-fit: cover;
-  border-radius: var(--r-xl);
-  box-shadow: var(--shadow);
+  border-radius: clamp(20px, 1.8vw, 28px);
+  box-shadow: var(--shadow-lg);
 }
-.why__badge {
-  position: absolute;
-  right: -18px;
-  bottom: 36px;
-  background: var(--red);
-  color: #fff;
-  border-radius: var(--r);
-  padding: 18px 24px;
-  box-shadow: 0 18px 40px rgba(225, 14, 18, 0.4);
-}
-.why__badge strong {
-  display: block;
-  font-size: 2rem;
-  font-weight: 900;
-}
-.why__badge span {
-  font-size: 0.8rem;
-  opacity: 0.92;
-}
-.why__est {
-  position: absolute;
-  top: 22px;
-  left: -16px;
-  background: #fff;
-  color: var(--red);
-  font-weight: 800;
-  font-size: 0.85rem;
-  padding: 10px 18px;
-  border-radius: 100px;
-  box-shadow: var(--shadow-sm);
+/* Prominent heading, but the body copy stays compact so it doesn't stretch
+   to the height of the enlarged image. */
+.why__title {
+  font-size: clamp(2.1rem, 3.6vw, 3rem);
+  margin-bottom: 26px;
 }
 .why__list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin: 28px 0 32px;
+  gap: 22px;
+  margin: 0 0 30px;
 }
 .why__list li {
   display: flex;
-  gap: 16px;
+  gap: 14px;
 }
-.why__tick {
+.why__emoji {
   flex: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--red);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 0.85rem;
-  margin-top: 2px;
+  font-size: 1.3rem;
+  line-height: 1.5;
 }
 .why__list strong {
-  font-size: 1.08rem;
+  font-size: 1.06rem;
+  font-weight: 600 !important; /* point titles read semibold, like the reference */
+  color: var(--ink);
 }
 .why__list p {
   color: var(--ink-2);
-  font-size: 0.94rem;
-  margin-top: 2px;
+  font-size: 0.95rem;
+  margin-top: 3px;
+  line-height: 1.6;
+}
+.why__cta {
+  margin-top: 4px;
+  --sweep: var(--ink); /* black curved fill sweeps up on hover */
+}
+/* Slowest, smoothest sweep for this CTA. */
+.why__cta::before {
+  transition-duration: 1.2s;
+}
+.why__cta:hover {
+  background: var(--red); /* keep the base red; the black curve reads on top */
 }
 
 /* ========================================================= PICKLES (UNIQUE) */
@@ -910,13 +1116,18 @@
     linear-gradient(180deg, var(--cream), var(--cream-2));
   border-block: 1px solid var(--line);
 }
+/* Wide section: full width with slim side padding so the rail breathes. */
+.pickles .container {
+  max-width: none;
+  padding-inline: clamp(16px, 2.5vw, 40px);
+}
 .pickles__ghost {
   position: absolute;
   top: -0.16em;
   right: 0.02em;
-  font-size: clamp(7rem, 17vw, 15rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
+  font-size: clamp(7rem, 18vw, 16rem);
+  font-weight: 900 !important; /* override the global 400 so the ghost reads bold */
+  letter-spacing: -0.05em;
   line-height: 1;
   color: var(--red);
   opacity: 0.05;
@@ -995,13 +1206,48 @@
   place-items: center;
   color: var(--ink);
   background: #fff;
-  transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.25s;
+  --sweep: var(--red); /* red curve sweeps up on hover */
+  transition: color 0.25s, border-color 0.25s, transform 0.25s;
 }
 .pickles__nav button:hover {
-  background: var(--red);
-  color: #fff;
+  color: #fff; /* icon turns white as the red fill rises */
   border-color: var(--red);
   transform: translateY(-2px);
+}
+/* Shop Pickles: text link with an underline that sweeps in on hover (no fill). */
+.pickles__shop {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 2px;
+  color: var(--ink);
+  font-weight: 600 !important;
+  transition: color 0.3s var(--ease);
+}
+.pickles__shop::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease);
+}
+.pickles__shop:hover {
+  color: var(--red);
+}
+.pickles__shop:hover::after {
+  transform: scaleX(1);
+}
+.pickles__shop svg {
+  transition: transform 0.3s var(--ease);
+}
+.pickles__shop:hover svg {
+  transform: translateX(4px);
 }
 .pickles__rail {
   position: relative;
@@ -1017,7 +1263,7 @@
   display: none;
 }
 .pickles__rail .pcard {
-  flex: 0 0 clamp(240px, 25vw, 296px);
+  flex: 0 0 clamp(300px, 30vw, 384px);
   scroll-snap-align: start;
 }
 @media (max-width: 900px) {
@@ -1041,44 +1287,156 @@
   position: relative;
   overflow: hidden;
 }
+/* Wide section: full width with slim side padding (like Pickles). */
+.show .container {
+  max-width: none;
+  padding-inline: clamp(16px, 2.5vw, 40px);
+}
 .show--warm {
   background: linear-gradient(120deg, var(--red-deep), var(--red));
 }
 .show--green {
   background: linear-gradient(120deg, #1b1b1b, #2c2623);
 }
+/* Background photo + dark scrim (darker toward the right where the copy sits). */
+.show__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.show__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(14, 6, 6, 0.4) 0%, rgba(14, 6, 6, 0.62) 55%, rgba(14, 6, 6, 0.82) 100%);
+}
 .show__inner {
+  position: relative;
+  z-index: 2; /* above the background image + scrim */
   display: grid;
   grid-template-columns: 0.66fr 2.34fr;
-  gap: 34px;
+  gap: clamp(28px, 4vw, 56px);
   align-items: center;
 }
 .show__inner--rev {
-  grid-template-columns: 2.34fr 0.66fr;
+  grid-template-columns: 2fr 1.1fr; /* more room for the right-hand content */
 }
 .show__inner--rev .show__intro {
   order: 2;
 }
 .show__title {
   font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800 !important; /* bold heading (overrides the global 400) */
   margin: 10px 0 16px;
 }
 .show__intro p {
   opacity: 0.92;
-  margin-bottom: 24px;
-  max-width: 300px;
+  margin-bottom: 22px;
+  max-width: 320px;
   line-height: 1.6;
 }
 .eyebrow--light {
   color: rgba(255, 255, 255, 0.9);
 }
-.show__rail {
+/* Two classes win over the base `.eyebrow { color: red }` so it stays visible
+   on the dark photo. */
+.show .eyebrow--light {
+  color: rgba(255, 255, 255, 0.92);
+}
+/* Shop link: underline that sweeps in on hover (matches the Pickles link). */
+.show__shop {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 2px;
+  color: #fff;
+  font-weight: 600 !important;
+  transition: color 0.3s var(--ease);
+}
+.show__shop::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease);
+}
+.show__shop:hover::after {
+  transform: scaleX(1);
+}
+.show__shop svg {
+  transition: transform 0.3s var(--ease);
+}
+.show__shop:hover svg {
+  transform: translateX(4px);
+}
+/* Scroll nav arrows (translucent on the photo; red curve sweeps up on hover). */
+.show__nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+}
+.show__nav button {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  --sweep: var(--red);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  place-items: center;
+  transition: color 0.25s, border-color 0.25s, transform 0.25s;
+}
+.show__nav button:hover:not(:disabled) {
+  border-color: var(--red);
+  transform: translateY(-2px);
+}
+.show__nav button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* No hover sweep on a disabled arrow. */
+.show__nav button:disabled::before {
+  display: none;
+}
+/* Horizontal, snap-scrolling rail with enlarged cards (like Pickles). */
+.show__rail {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.show__rail::-webkit-scrollbar {
+  display: none;
+}
+/* Exactly two cards per view; the right arrow pages to the next two. */
+.show__rail .pcard {
+  flex: 0 0 calc((100% - 22px) / 2);
+  scroll-snap-align: start;
 }
 .show .pcard {
   color: var(--ink);
+}
+@media (max-width: 900px) {
+  .show__inner,
+  .show__inner--rev {
+    grid-template-columns: 1fr;
+  }
+  .show__inner--rev .show__intro {
+    order: 0;
+  }
 }
 
 /* ============================================================== MADE */
@@ -1093,7 +1451,7 @@
   position: relative;
   border-radius: var(--r-xl);
   overflow: hidden;
-  min-height: 460px;
+  min-height: clamp(520px, 60vh, 680px);
   display: grid;
   place-items: center;
   text-align: center;
@@ -1169,23 +1527,37 @@
   box-shadow: 0 0 0 4px rgba(225, 14, 18, 0.2);
   animation: blink 1.8s infinite;
 }
+/* Text link with an underline that sweeps in slowly on hover (no bg) —
+   matches the Shop Pickles / Shop Pastes links. */
 .smwall__follow {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
-  border-radius: 100px;
-  font-weight: 700;
-  font-size: 0.92rem;
-  color: #fff;
-  background: var(--red);
-  box-shadow: 0 8px 20px rgba(225, 14, 18, 0.22);
-  transition: transform 0.3s var(--ease), background 0.3s;
+  padding: 6px 2px;
+  font-weight: 600 !important;
+  font-size: 0.95rem;
+  color: var(--ink);
   white-space: nowrap;
+  transition: color 0.4s var(--ease);
+}
+.smwall__follow::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s var(--ease); /* slow, smooth */
 }
 .smwall__follow:hover {
-  transform: translateY(-2px);
-  background: var(--red-deep);
+  color: var(--red);
+}
+.smwall__follow:hover::after {
+  transform: scaleX(1);
 }
 
 /* Mosaic — auto-packing tiles of mixed sizes */
@@ -1313,54 +1685,94 @@
   justify-content: center;
   margin-bottom: 10px;
 }
+/* Increased side padding: a narrower, centred row of marketplace cards. */
 .avail__row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-top: 32px;
+  gap: 22px;
+  margin-top: 40px;
+  max-width: 940px;
+  margin-inline: auto;
+  padding-inline: clamp(0px, 2vw, 24px);
 }
 .avail__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: var(--r);
-  padding: 28px;
-  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  border-radius: var(--r-lg);
+  padding: 26px 20px;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease),
+    border-color 0.4s var(--ease);
 }
 .avail__card:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow);
+  box-shadow: 0 16px 34px rgba(26, 26, 26, 0.12);
+  border-color: var(--brand);
 }
-.avail__card strong {
+.avail__logo {
+  height: 40px;
+  width: auto;
+  max-width: 80%;
+  object-fit: contain;
   display: block;
-  font-size: 1.3rem;
-  color: var(--red);
+  transition: transform 0.4s var(--ease);
+}
+.avail__card:hover .avail__logo {
+  transform: scale(1.05);
+}
+.avail__name {
+  font-size: 1.05rem;
+  font-weight: 700 !important; /* bold brand name (overrides the global 400) */
+  color: var(--ink);
+  letter-spacing: -0.01em;
 }
 .avail__card span {
-  font-size: 0.8rem;
-  color: var(--ink-3);
+  font-size: 0.74rem;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand); /* brand-coloured tagline */
 }
 
 /* ============================================================== TRUST */
 .trust {
-  background: var(--ink);
-  color: #fff;
+  background: #fff;
+  color: var(--ink);
+  border-top: 1px solid var(--line);
 }
 .trust__inner {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding-block: 40px;
+  gap: 0;
+  padding-block: clamp(40px, 5vw, 64px);
 }
 .trust__item {
   text-align: center;
+  padding-inline: clamp(16px, 2.5vw, 36px);
+}
+/* Thin vertical dividers between items (not before the first one). */
+.trust__item + .trust__item {
+  border-left: 1px solid var(--line);
+}
+.trust__icon {
+  display: inline-grid;
+  place-items: center;
+  color: var(--ink);
+  margin-bottom: 14px;
 }
 .trust__item strong {
   display: block;
-  font-size: 1.02rem;
+  font-size: 1.08rem;
+  font-weight: 700 !important; /* bold title (overrides the global 400) */
+  color: var(--ink);
+  margin-bottom: 6px;
 }
 .trust__item span {
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.86rem;
+  color: var(--ink-3);
 }
 
 /* ============================================================== FOOTER */
@@ -1387,28 +1799,28 @@
   z-index: 2;
   display: grid;
   grid-template-columns: 1.7fr 1fr 1fr 1.5fr;
-  gap: 44px;
-  padding-block: clamp(50px, 6vw, 84px);
+  gap: clamp(45px, 4.5vw, 55px);
+  padding-block: clamp(45px, 4.5vw, 55px);
 }
 .footer__logo {
   background: #fff;
   display: inline-flex;
-  padding: 12px 18px;
+  padding: 10px 16px;
   border-radius: var(--r-sm);
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
 }
 .footer__brand p {
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   max-width: 330px;
-  margin-bottom: 20px;
-  line-height: 1.6;
+  margin-bottom: 14px;
+  line-height: 1.55;
 }
 .footer__contact {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 22px;
+  gap: 5px;
+  margin-bottom: 16px;
 }
 .footer__contact a {
   font-weight: 700;
@@ -1540,25 +1952,27 @@
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  padding-block: 22px;
+  padding-block: 13px;
   border-top: 1px solid rgba(255, 255, 255, 0.18);
   font-size: 0.82rem;
 }
 .footer__tag {
   font-weight: 600;
 }
-/* Oversized ghost wordmark anchored to the bottom edge */
+/* Oversized brand wordmark — light, faded red filling the white band below
+   the footer (edges clipped by the footer's overflow: hidden). */
 .footer__wordmark {
   position: relative;
   z-index: 1;
-  margin-top: -0.06em;
   text-align: center;
-  font-size: clamp(4rem, 19vw, 17rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 0.78;
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.16);
+  white-space: nowrap;
+  font-size: clamp(2.4rem, 10vw, 8.5rem);
+  font-weight: 900 !important; /* bold (overrides the global 400) */
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  padding-block: 8px 6px;
+  background: #fff;
+  color: rgba(225, 14, 18, 0.2); /* light, faded red */
   user-select: none;
   pointer-events: none;
 }

@@ -113,3 +113,18 @@ export function imageFor(name = '') {
   }
   return POOL[hash(name) % POOL.length]
 }
+
+// Resolve a product name to a stable trio of DISTINCT images, used by the
+// product-card gallery (hover/touch the left·middle·right thirds → img 1·2·3).
+// The first image is always the canonical `imageFor` shot so the card matches
+// the rest of the site; the other two are deterministically picked extras.
+export function galleryFor(name = '', count = 3) {
+  const trio = [imageFor(name)]
+  const candidates = [...POOL, IMG.thali, IMG.southIndian, IMG.gravyPan, IMG.curryBowls, IMG.rice, IMG.bowl]
+  const start = hash(name)
+  for (let guard = 0; trio.length < count && guard < 64; guard++) {
+    const img = candidates[(start + guard) % candidates.length]
+    if (!trio.includes(img)) trio.push(img)
+  }
+  return trio
+}

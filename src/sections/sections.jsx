@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import Reveal from '../components/Reveal.jsx'
-import { IMG, imageFor } from '../lib/images.js'
+import { IMG, imageFor, galleryFor } from '../lib/images.js'
 import { SOCIAL, SOCIAL_HANDLE } from '../lib/social.js'
 import {
   HIGHLIGHTS,
@@ -185,27 +185,100 @@ export function ShopByCategory() {
 function ProductCard({ p, delay = 0 }) {
   const rating = p.rating ?? 4.8
   const cat = p.cat ?? 'Garudas Kitchen'
+  // Gallery: hovering / touching the left·middle·right thirds of the image
+  // reveals slide 1·2·3. A single explicit p.img keeps the old single-shot card.
+  const gallery = p.gallery ?? (p.img ? [p.img] : galleryFor(p.name))
+  const [active, setActive] = useState(0)
+
+  // Map a pointer's x-position over the image to the matching slide index.
+  const pickZone = (e) => {
+    if (gallery.length < 2) return
+    const r = e.currentTarget.getBoundingClientRect()
+    const ratio = (e.clientX - r.left) / r.width
+    const zone = Math.floor(ratio * gallery.length)
+    setActive(Math.min(gallery.length - 1, Math.max(0, zone)))
+  }
+  const reset = () => setActive(0)
+
   return (
     <Reveal delay={delay} className="pcard card">
-      <div className="pcard__img">
+      <div
+        className="pcard__img"
+        onPointerMove={pickZone}
+        onPointerDown={pickZone}
+        onPointerLeave={reset}
+      >
         {p.save && <span className="chip pcard__save">{p.save}</span>}
         <span className="pcard__rate">
-          <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
-            <path fill="#f5a623" d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" />
-          </svg>
-          {rating}
+          <span className="pcard__rate-face pcard__rate-stars">
+            <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
+              <path fill="#f5a623" d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" />
+            </svg>
+            {rating}
+          </span>
+          <span className="pcard__rate-face pcard__rate-eye" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="21" height="21">
+              <path
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"
+              />
+              <circle cx="12" cy="12" r="2.6" fill="currentColor" />
+            </svg>
+          </span>
         </span>
-        <img src={p.img || imageFor(p.name)} alt={p.name} loading="lazy" />
-        <button className="pcard__choose">Choose options</button>
+
+        <div className="pcard__gallery">
+          {gallery.map((src, i) => (
+            <img
+              key={i}
+              src={src}
+              alt={`${p.name} — view ${i + 1}`}
+              loading="lazy"
+              className={`pcard__slide ${i === active ? 'is-active' : ''}`}
+            />
+          ))}
+        </div>
+
+        <button className="pcard__choose">
+          <span>Choose options</span>
+        </button>
+
+        {gallery.length > 1 && (
+          <div className="pcard__dots" role="tablist" aria-label="Product images">
+            {gallery.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                role="tab"
+                aria-selected={i === active}
+                aria-label={`Show image ${i + 1}`}
+                className={`pcard__dot ${i === active ? 'is-active' : ''}`}
+                onPointerDown={(e) => {
+                  e.stopPropagation()
+                  setActive(i)
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            ))}
+          </div>
+        )}
       </div>
       <div className="pcard__body">
         <span className="pcard__cat">{cat}</span>
-        <h4 className="pcard__name">{p.name}</h4>
-        <div className="pcard__price">
-          <span className="pcard__from">From</span>
-          <span className="pcard__now">{rupee(p.price)}</span>
+        <div className="pcard__row">
+          <h4 className="pcard__name">{p.name}</h4>
+          <div className="pcard__pricewrap">
+            <div className="pcard__price">
+              <span className="pcard__from">From</span>
+              <span className="pcard__now">{rupee(p.price)}</span>
+            </div>
+            {p.mrp && <span className="pcard__mrp">{rupee(p.mrp)}</span>}
+          </div>
         </div>
-        {p.mrp && <span className="pcard__mrp">{rupee(p.mrp)}</span>}
       </div>
     </Reveal>
   )
@@ -213,7 +286,7 @@ function ProductCard({ p, delay = 0 }) {
 
 export function Bestsellers() {
   return (
-    <section className="block block--tint block--wide">
+    <section className="block block--wide">
       <div className="container">
         <div className="block__head">
           <div>
@@ -254,22 +327,29 @@ export function MarqueeBand() {
   )
 }
 
+// Simple meal card — clean image, name, price (no badges/hover controls).
+function MealCard({ p, delay = 0 }) {
+  return (
+    <Reveal delay={delay} className="mlcard">
+      <a href="#shop" className="mlcard__img">
+        <img src={p.img || imageFor(p.name)} alt={p.name} loading="lazy" />
+      </a>
+      <h4 className="mlcard__name">{p.name}</h4>
+      <div className="mlcard__price">{rupee(p.price)}</div>
+    </Reveal>
+  )
+}
+
 export function MostLoved() {
   return (
-    <section className="block block--wide">
+    <section className="block block--wide block--tint">
       <div className="container">
         <div className="block__head">
-          <div>
-            <span className="eyebrow">Fan favourites</span>
-            <h2 className="section-title">Most Loved Meals</h2>
-          </div>
-          <a href="#shop" className="block__link">
-            View all <Arrow />
-          </a>
+          <h2 className="section-title">Most Loved Meals</h2>
         </div>
         <div className="pgrid">
           {MOST_LOVED.map((p, i) => (
-            <ProductCard key={p.name} p={p} delay={i * 0.06} />
+            <MealCard key={p.name} p={p} delay={i * 0.06} />
           ))}
         </div>
       </div>
@@ -280,29 +360,23 @@ export function MostLoved() {
 /* ------------------------------------------------------------ WHY DIFFERENT */
 export function WhyDifferent() {
   const points = [
-    ['Freeze-dried, not just instant', 'Locks in up to 97% of nutrition — unlike ordinary instant food.'],
-    ['Works anywhere, no fridge', 'From hostels to Himalayan treks. No refrigeration, no fuss.'],
-    ['Carry-on friendly', 'Each meal weighs under 100g. Won’t cost a gram of your luggage.'],
-    ['Authentic Indian dishes', 'Recipes crafted by master chefs from every corner of India.'],
+    ['🧊', 'Freeze-Dried, Not Just Instant', 'Locks in up to 97% of nutrition — unlike ordinary instant food that loses most of it.'],
+    ['⛰️', 'Works Anywhere, No Fridge Needed', 'From hostels to Himalayan treks — no refrigeration, no cooking setup required.'],
+    ['📦', 'Carry-On Friendly', 'Each meal weighs under 100g. Fits in any bag. Won’t add a gram to your luggage limit.'],
+    ['🍛', '60+ Authentic Indian Dishes', 'From Dal Makhani to Mysore Mutton — recipes crafted by master chefs from across India.'],
   ]
   return (
     <section className="why" id="why">
       <div className="container why__inner">
         <Reveal className="why__media">
           <img src={IMG.curryBowls} alt="Garudas meal" />
-          <div className="why__badge">
-            <strong>97%</strong>
-            <span>nutrition retained</span>
-          </div>
-          <div className="why__est">Est. 1977</div>
         </Reveal>
         <div className="why__copy">
-          <span className="eyebrow">The Garudas difference</span>
-          <h2 className="section-title">Why Garudas is Different</h2>
+          <h2 className="section-title why__title">Why Garudas is Different</h2>
           <ul className="why__list">
-            {points.map(([t, d], i) => (
+            {points.map(([icon, t, d], i) => (
               <Reveal as="li" key={t} delay={i * 0.07}>
-                <span className="why__tick">✓</span>
+                <span className="why__emoji">{icon}</span>
                 <div>
                   <strong>{t}</strong>
                   <p>{d}</p>
@@ -310,8 +384,8 @@ export function WhyDifferent() {
               </Reveal>
             ))}
           </ul>
-          <a href="#shop" className="btn btn--primary">
-            See All Products <Arrow />
+          <a href="#shop" className="btn btn--primary btn-sweep why__cta">
+            <span>See All Products</span> <Arrow />
           </a>
         </div>
       </div>
@@ -320,19 +394,70 @@ export function WhyDifferent() {
 }
 
 /* ---------------------------------------------------------- SHOWCASE BANDS */
-function Showcase({ variant, eyebrow, title, copy, link, items }) {
+function Showcase({ variant, eyebrow, title, copy, link, items, bg }) {
+  const rail = useRef(null)
+  const [atStart, setAtStart] = useState(true)
+  const [atEnd, setAtEnd] = useState(false)
+
+  const update = () => {
+    const r = rail.current
+    if (!r) return
+    setAtStart(r.scrollLeft <= 1)
+    setAtEnd(r.scrollLeft + r.clientWidth >= r.scrollWidth - 1)
+  }
+
+  useEffect(() => {
+    update()
+    const r = rail.current
+    if (!r) return
+    r.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      r.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
+  // Page by two cards at a time (the rail shows exactly two).
+  const page = (dir) => {
+    const r = rail.current
+    if (!r) return
+    const card = r.querySelector('.pcard')
+    const gap = parseFloat(getComputedStyle(r).columnGap) || 22
+    const step = card ? (card.offsetWidth + gap) * 2 : r.clientWidth
+    r.scrollBy({ left: dir * step, behavior: 'smooth' })
+  }
+
   return (
     <section className={`show show--${variant}`}>
+      {bg && (
+        <>
+          <img src={bg} alt="" className="show__bg" aria-hidden="true" />
+          <div className="show__scrim" />
+        </>
+      )}
       <div className={`container show__inner ${variant === 'green' ? 'show__inner--rev' : ''}`}>
         <div className="show__intro">
           <span className="eyebrow eyebrow--light">{eyebrow}</span>
           <h2 className="show__title">{title}</h2>
           <p>{copy}</p>
-          <a href="#shop" className="btn btn--light">
-            {link} <Arrow />
+          <a href="#shop" className="show__shop">
+            <span>{link}</span> <Arrow />
           </a>
+          <div className="show__nav">
+            <button className="btn-sweep" onClick={() => page(-1)} disabled={atStart} aria-label="Scroll left">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" d="M15 6l-6 6 6 6" />
+              </svg>
+            </button>
+            <button className="btn-sweep" onClick={() => page(1)} disabled={atEnd} aria-label="Scroll right">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
+              </svg>
+            </button>
+          </div>
         </div>
-        <div className="show__rail">
+        <div className="show__rail" ref={rail}>
           {items.map((p, i) => (
             <ProductCard key={p.name} p={p} delay={i * 0.05} />
           ))}
@@ -381,16 +506,16 @@ export function Pickles() {
               Sun-ripened and slow-cured in small batches — the taste of home, sealed jar by jar.
             </p>
             <div className="pickles__actions">
-              <a href="#shop" className="btn btn--primary">
-                Shop Pickles <Arrow />
+              <a href="#shop" className="pickles__shop">
+                <span>Shop Pickles</span> <Arrow />
               </a>
               <div className="pickles__nav">
-                <button onClick={() => nudge(-340)} aria-label="Scroll left">
+                <button className="btn-sweep" onClick={() => nudge(-340)} aria-label="Scroll left">
                   <svg viewBox="0 0 24 24" width="20" height="20">
                     <path fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" d="M15 6l-6 6 6 6" />
                   </svg>
                 </button>
-                <button onClick={() => nudge(340)} aria-label="Scroll right">
+                <button className="btn-sweep" onClick={() => nudge(340)} aria-label="Scroll right">
                   <svg viewBox="0 0 24 24" width="20" height="20">
                     <path fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
                   </svg>
@@ -419,6 +544,7 @@ export function Pastes() {
       copy="Restaurant-grade bases — one jar, a dozen dishes."
       link="Shop Pastes"
       items={PASTES}
+      bg={IMG.gravyPan}
     />
   )
 }
@@ -503,6 +629,15 @@ export function SocialWall() {
 }
 
 /* ---------------------------------------------------------- AVAILABLE ON */
+const MARKETPLACE_BRANDS = [
+  { id: 'amazon', label: 'Amazon', logo: 'amazon.webp', tag: 'Shop Now', color: '#f59e0b' },
+  { id: 'blinkit', label: 'Blinkit', logo: 'blinkit.png', tag: '10 Min Delivery', color: '#0c831f' },
+  { id: 'flipkart', label: 'Flipkart', logo: 'flipkart.png', tag: 'Shop Now', color: '#2874f0' },
+  { id: 'zepto', label: 'Zepto', logo: 'zepto.png', tag: '10 Min Delivery', color: '#6c2bd9' },
+]
+
+const asset = (f) => `${import.meta.env.BASE_URL}images/${f}`
+
 export function AvailableOn() {
   return (
     <section className="block block--tint">
@@ -511,11 +646,17 @@ export function AvailableOn() {
           <span className="eyebrow">Find us online</span>
           <h2 className="section-title">Also Available On</h2>
           <div className="avail__row">
-            {MARKETPLACES.map((m) => (
-              <div key={m} className="avail__card">
-                <strong>{m}</strong>
-                <span>Fast delivery</span>
-              </div>
+            {MARKETPLACE_BRANDS.map((b) => (
+              <a
+                key={b.id}
+                href="#shop"
+                className="avail__card"
+                style={{ '--brand': b.color }}
+              >
+                <img className="avail__logo" src={asset(b.logo)} alt={`${b.label} logo`} loading="lazy" />
+                <strong className="avail__name">{b.label}</strong>
+                <span>{b.tag}</span>
+              </a>
             ))}
           </div>
         </Reveal>
@@ -525,18 +666,42 @@ export function AvailableOn() {
 }
 
 /* ------------------------------------------------------- FINAL FEATURES */
+function TrustIcon({ name }) {
+  const p = {
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.6,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+  }
+  const map = {
+    box: <path {...p} d="M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8" />,
+    shield: <path {...p} d="M12 3l7 3v5c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6zM9 12l2 2 4-4" />,
+    headset: <path {...p} d="M4 13v-1a8 8 0 0 1 16 0v1M4 13a2 2 0 0 1 2 2v2a2 2 0 0 1-4 0v-2a2 2 0 0 1 2-2zM20 13a2 2 0 0 1 2 2v2a2 2 0 0 1-4 0v-2a2 2 0 0 1 2-2zM20 17v1a3 3 0 0 1-3 3h-3" />,
+    leaf: <path {...p} d="M5 21c0-8 6-14 16-15-1 9-7 15-16 15zM5 21c2-5 5-8 10-10" />,
+  }
+  return (
+    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+      {map[name]}
+    </svg>
+  )
+}
+
 export function TrustStrip() {
   const items = [
-    ['Free Shipping', 'On all orders above ₹499'],
-    ['100% Secure Checkout', 'UPI, cards & net-banking'],
-    ["We're Here For You", 'Mon–Sat, 10am–6pm'],
-    ['No Added Preservatives', 'All natural, always'],
+    ['box', 'Free Shipping', 'On all orders above ₹499'],
+    ['shield', '100% Secure Checkout', 'UPI, cards & net-banking — fully encrypted'],
+    ['headset', "We're Here For You", 'Mon–Sat, 10am–6pm'],
+    ['leaf', 'No Added Preservatives', 'All-natural ingredients in every bowl'],
   ]
   return (
     <section className="trust">
       <div className="container trust__inner">
-        {items.map(([t, s], i) => (
+        {items.map(([icon, t, s], i) => (
           <Reveal key={t} delay={i * 0.05} className="trust__item">
+            <span className="trust__icon">
+              <TrustIcon name={icon} />
+            </span>
             <strong>{t}</strong>
             <span>{s}</span>
           </Reveal>

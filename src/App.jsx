@@ -2,6 +2,7 @@ import Header from './components/Header/Header.jsx'
 import Footer from './sections/Footer.jsx'
 import HeroCarousel from './sections/HeroCarousel.jsx'
 import { useLenis } from './hooks/useLenis.js'
+import { useRevealHeadings } from './hooks/useRevealHeadings.js'
 import {
   FeatureStrip,
   ShopByCategory,
@@ -22,6 +23,8 @@ export default function App() {
   // Lenis smooth scrolling — header stays fixed outside the scrolled flow,
   // every section below scrolls with momentum (à la bowlfulstore.com).
   useLenis()
+  // Slide every section heading up into view as it enters the viewport.
+  useRevealHeadings()
 
   return (
     <>
