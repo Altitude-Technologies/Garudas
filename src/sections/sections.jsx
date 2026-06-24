@@ -290,7 +290,7 @@ function ProductCard({ p, delay = 0 }) {
         </div>
 
         <button className="pcard__choose">
-          <span>Choose options</span>
+          <span>Add to Cart</span>
         </button>
 
         {gallery.length > 1 && (
