@@ -29,13 +29,18 @@
   gap: 12px;
 }
 
+/* Wider page, smaller side padding so images are larger */
+.pp .container {
+  max-width: 1480px;
+  padding-inline: clamp(14px, 2.4vw, 36px);
+}
 /* Grid: [main] [thumbs] [content]; main sticks while the rest scrolls */
 .pp__grid {
   display: grid;
-  grid-template-columns: 1.05fr 0.5fr 1fr;
-  gap: clamp(18px, 2vw, 30px);
+  grid-template-columns: 1.3fr 0.55fr 1fr;
+  gap: clamp(12px, 1.4vw, 22px);
   align-items: start;
-  padding-block: clamp(20px, 3vw, 36px) 90px;
+  padding-block: clamp(16px, 2vw, 28px) 80px;
 }
 .pp__gallery {
   display: contents;
@@ -58,7 +63,7 @@
 }
 .pp__thumbs img {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 3 / 3.5;
   object-fit: cover;
   border-radius: var(--r);
   background: var(--cream-2);
@@ -360,8 +365,7 @@
   border: 1px solid var(--line);
   border-radius: var(--r);
 }
-.pp__feat i {
-  font-size: 1.2rem;
+.pp__feat svg {
   color: var(--red);
 }
 .pp__feat strong {
@@ -527,8 +531,9 @@
   background: #fff;
   color: var(--ink);
 }
-.pp__disp i {
+.pp__disp svg {
   color: var(--ink-2);
+  flex: none;
 }
 
 @media (max-width: 960px) {

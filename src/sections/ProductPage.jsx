@@ -17,18 +17,38 @@ const SHARE = [
   { label: 'Email', icon: 'fa-solid fa-envelope' },
 ]
 const FEATURES = [
-  { icon: 'fa-solid fa-truck-fast', t: 'Free Shipping', s: '₹499+' },
-  { icon: 'fa-solid fa-lock', t: 'Secure Checkout', s: '' },
-  { icon: 'fa-solid fa-tag', t: 'COD Available', s: '' },
-  { icon: 'fa-solid fa-plane', t: 'TSA-Friendly', s: '' },
+  { icon: 'truck', t: 'Free Shipping', s: '₹499+' },
+  { icon: 'lock', t: 'Secure Checkout', s: '' },
+  { icon: 'tag', t: 'COD Available', s: '' },
+  { icon: 'plane', t: 'TSA-Friendly', s: '' },
 ]
+
+// Inline icons (render reliably regardless of the icon CDN).
+function Ico({ name }) {
+  const map = {
+    truck: 'M3 7h11v8H3zM14 10h4l3 3v2h-7zM7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+    lock: 'M6 11V8a6 6 0 0 1 12 0v3M5 11h14v9H5zM12 15v2',
+    tag: 'M20.6 13.4 11 3.8a2 2 0 0 0-1.4-.6H4v5.6a2 2 0 0 0 .6 1.4l9.6 9.6a2 2 0 0 0 2.8 0l3.6-3.6a2 2 0 0 0 0-2.8z',
+    plane: 'M2 13l19-9-8.5 18-2.2-7.3z',
+    cart: 'M3 4h2l2 12h11l2-8H6M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm9 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z',
+    box: 'M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8',
+    leaf: 'M5 21c0-8 6-14 16-15-1 9-7 15-16 15zM5 21c2-5 5-8 10-10',
+    warning: 'M12 3 2 20h20zM12 10v4M12 17h.01',
+    heart: 'M20 8.5a3.5 3.5 0 0 0-6-2.5l-2 2-2-2a3.5 3.5 0 1 0-5 5l7 7 7-7a3.5 3.5 0 0 0 1-2.5z',
+  }
+  return (
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+      <path d={map[name] || ''} fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 const BADGES = ['Zero Preservatives', 'No MSG', 'Ready in 5 Min', '12-Month Shelf Life', 'Freeze-Dried']
 const STEPS = ['Open & remove oxygen absorber', 'Add hot water as mentioned', 'Cover and wait 5 minutes', 'Stir well and enjoy hot food']
 const DISPATCH = [
-  { icon: 'fa-solid fa-truck', t: 'Dispatched in 24 Hours' },
-  { icon: 'fa-solid fa-leaf', t: '100% Natural Ingredients' },
-  { icon: 'fa-solid fa-circle-exclamation', t: 'Zero Preservatives' },
-  { icon: 'fa-solid fa-box', t: 'Cash on Delivery Available' },
+  { icon: 'truck', t: 'Dispatched in 24 Hours' },
+  { icon: 'leaf', t: '100% Natural Ingredients' },
+  { icon: 'warning', t: 'Zero Preservatives' },
+  { icon: 'box', t: 'Cash on Delivery Available' },
 ]
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -77,7 +97,7 @@ export default function ProductPage() {
   if (!product) return null
 
   const p = product
-  const gallery = galleryFor(p.name, 5)
+  const gallery = galleryFor(p.name, 8)
   const rating = p.rating ?? 4.36
   const reviews = p.reviews ?? 25
   const total = p.price * PACKS[pack].mult * qty
@@ -86,9 +106,9 @@ export default function ProductPage() {
 
   const today = new Date()
   const timeline = [
-    { label: 'Order On', date: fmtDate(today), icon: 'fa-solid fa-cart-shopping' },
-    { label: 'Production', date: fmtDate(addDays(today, 4)), icon: 'fa-solid fa-truck-ramp-box' },
-    { label: 'Delivered', date: fmtDate(addDays(today, 6)), icon: 'fa-solid fa-hand-holding-heart' },
+    { label: 'Order On', date: fmtDate(today), icon: 'cart' },
+    { label: 'Production', date: fmtDate(addDays(today, 4)), icon: 'box' },
+    { label: 'Delivered', date: fmtDate(addDays(today, 6)), icon: 'heart' },
   ]
 
   return (
@@ -183,7 +203,7 @@ export default function ProductPage() {
               {timeline.map((t, i) => (
                 <div className="pp__tstep" key={t.label}>
                   <span className="pp__tdot">
-                    <i className={t.icon} aria-hidden="true" />
+                    <Ico name={t.icon} />
                   </span>
                   <strong>{t.label}</strong>
                   <span>{t.date}</span>
@@ -208,7 +228,7 @@ export default function ProductPage() {
           <div className="pp__features">
             {FEATURES.map((f) => (
               <div key={f.t} className="pp__feat">
-                <i className={f.icon} aria-hidden="true" />
+                <Ico name={f.icon} />
                 <strong>{f.t}</strong>
                 {f.s && <span>{f.s}</span>}
               </div>
@@ -273,7 +293,7 @@ export default function ProductPage() {
           <div className="pp__dispatch">
             {DISPATCH.map((d) => (
               <div key={d.t} className="pp__disp">
-                <i className={d.icon} aria-hidden="true" />
+                <Ico name={d.icon} />
                 {d.t}
               </div>
             ))}
