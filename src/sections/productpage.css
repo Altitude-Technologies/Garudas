@@ -1,33 +1,12 @@
 /* ========================================================== PRODUCT PAGE */
+/* z-index sits BELOW the site header (1000) so the header + nav show on top. */
 .pp {
   position: fixed;
   inset: 0;
-  z-index: 1300;
+  z-index: 900;
   background: var(--bg);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-}
-.pp__close {
-  position: fixed;
-  top: 18px;
-  right: 22px;
-  z-index: 10;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: var(--ink);
-  background: #fff;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-  transition: background 0.25s, color 0.25s, transform 0.25s, border-color 0.25s;
-}
-.pp__close:hover {
-  background: var(--red);
-  color: #fff;
-  border-color: var(--red);
-  transform: rotate(90deg);
 }
 
 /* Wider page, smaller side padding so images are larger */
@@ -47,7 +26,7 @@
   grid-template-columns: 1.3fr 0.5fr 1fr;
   gap: clamp(14px, 1.6vw, 26px);
   align-items: start;
-  padding-block: clamp(16px, 2vw, 28px) 80px;
+  padding-block: calc(var(--header-h) + 24px) 80px;
 }
 .pp__gallery {
   display: contents;
@@ -55,9 +34,9 @@
 /* Main image fits the screen and stays fixed. */
 .pp__main {
   position: sticky;
-  top: 22px;
+  top: calc(var(--header-h) + 14px);
   align-self: start;
-  height: calc(100vh - 44px);
+  height: calc(100vh - var(--header-h) - 32px);
 }
 .pp__main img {
   width: 100%;
@@ -70,7 +49,7 @@
    level with the content (sticky element ~ half the content height). */
 .pp__thumbs {
   position: sticky;
-  top: 22px;
+  top: calc(var(--header-h) + 14px);
   align-self: start;
   height: 50%;
   display: flex;
@@ -288,7 +267,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #2f7d3f;
+  background: var(--red);
   color: #fff;
   font-size: 1.2rem;
   margin-bottom: 4px;
@@ -307,7 +286,7 @@
   top: 28px;
   left: 60%;
   width: 80%;
-  border-top: 2px dotted #8fc79a;
+  border-top: 2px dotted rgba(225, 14, 18, 0.4);
   z-index: -1;
 }
 

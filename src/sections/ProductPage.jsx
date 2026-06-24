@@ -88,8 +88,17 @@ export default function ProductPage() {
     }
     const onKey = (e) => e.key === 'Escape' && setProduct(null)
     document.addEventListener('keydown', onKey)
+    // Clicking the site-header logo while on this page returns to the store.
+    const onClick = (e) => {
+      if (product && e.target.closest('.logo')) {
+        e.preventDefault()
+        setProduct(null)
+      }
+    }
+    document.addEventListener('click', onClick, true)
     return () => {
       document.removeEventListener('keydown', onKey)
+      document.removeEventListener('click', onClick, true)
       window.lenis?.start()
     }
   }, [product])
@@ -113,12 +122,6 @@ export default function ProductPage() {
 
   return (
     <div className="pp" data-lenis-prevent>
-      <button className="pp__close" onClick={() => setProduct(null)} aria-label="Close">
-        <svg viewBox="0 0 24 24" width="20" height="20">
-          <path fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" d="M6 6l12 12M18 6 6 18" />
-        </svg>
-      </button>
-
       <div className="pp__grid container">
         {/* ---------- Gallery: sticky main + scrolling thumbs ---------- */}
         <div className="pp__gallery">
