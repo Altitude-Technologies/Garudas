@@ -2196,6 +2196,7 @@
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr); /* cap row to panel height so the info column scrolls */
   box-shadow: 0 40px 90px rgba(0, 0, 0, 0.35);
   opacity: 0;
   transform: translateY(16px) scale(0.985);
@@ -2500,7 +2501,7 @@
 @media (max-width: 860px) {
   .qv__panel {
     grid-template-columns: 1fr;
-    grid-template-rows: 38% 1fr;
+    grid-template-rows: 34% minmax(0, 1fr);
     height: min(90vh, 820px);
   }
 }
