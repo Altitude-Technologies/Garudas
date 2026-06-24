@@ -97,7 +97,7 @@ export default function ProductPage() {
   if (!product) return null
 
   const p = product
-  const gallery = galleryFor(p.name, 8)
+  const gallery = galleryFor(p.name, 5) // 1 main + 4 side thumbnails
   const rating = p.rating ?? 4.36
   const reviews = p.reviews ?? 25
   const total = p.price * PACKS[pack].mult * qty

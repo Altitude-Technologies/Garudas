@@ -34,20 +34,26 @@
   max-width: 1480px;
   padding-inline: clamp(14px, 2.4vw, 36px);
 }
-/* Grid: [main] [thumbs] [content]; main sticks while the rest scrolls */
+/* Two columns: [gallery] [content]. The gallery has its own [main | thumbs].
+   The main image sticks WITHIN the gallery, so it releases exactly where the
+   thumbnails end — then only the content keeps scrolling. */
 .pp__grid {
   display: grid;
-  grid-template-columns: 1.3fr 0.55fr 1fr;
-  gap: clamp(12px, 1.4vw, 22px);
+  grid-template-columns: 1.45fr 1fr;
+  gap: clamp(16px, 2vw, 30px);
   align-items: start;
   padding-block: clamp(16px, 2vw, 28px) 80px;
 }
 .pp__gallery {
-  display: contents;
+  display: grid;
+  grid-template-columns: 1.5fr 0.55fr;
+  gap: 16px;
+  align-items: start;
 }
 .pp__main {
   position: sticky;
   top: 90px;
+  align-self: start;
 }
 .pp__main img {
   width: 100%;
@@ -538,6 +544,9 @@
 
 @media (max-width: 960px) {
   .pp__grid {
+    grid-template-columns: 1fr;
+  }
+  .pp__gallery {
     grid-template-columns: 1fr;
   }
   .pp__main {
