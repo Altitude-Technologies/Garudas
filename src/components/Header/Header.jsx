@@ -17,9 +17,21 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    // The product page scrolls inside its own `.pp` container, not the window —
+    // so detect scroll from whichever is active (capture catches both).
+    const onScroll = () => {
+      const pp = document.querySelector('.pp')
+      setScrolled(pp ? pp.scrollTop > 8 : window.scrollY > 8)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true, capture: true })
+    // The product page always opens at the top — show the full header again.
+    const onOpen = () => setScrolled(false)
+    window.addEventListener('productpage', onOpen)
+    return () => {
+      window.removeEventListener('scroll', onScroll, { capture: true })
+      window.removeEventListener('productpage', onOpen)
+    }
   }, [])
 
   return (

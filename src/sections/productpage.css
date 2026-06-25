@@ -24,7 +24,8 @@
 .pp__grid {
   display: grid;
   grid-template-columns: 1.3fr 0.5fr 1fr;
-  gap: clamp(14px, 1.6vw, 26px);
+  column-gap: clamp(16px, 1.6vw, 26px);
+  row-gap: 14px;
   align-items: start;
   padding-block: calc(var(--header-h) + 24px) 80px;
 }
@@ -68,13 +69,16 @@
 /* Content */
 .pp__content {
   min-width: 0;
+  padding-left: clamp(10px, 2vw, 36px); /* breathing room between images and copy */
 }
 .pp__cat {
-  font-size: 0.95rem;
-  color: var(--ink-2);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
 }
 .pp__title {
-  font-size: clamp(2rem, 3.4vw, 2.8rem);
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
   font-weight: 800 !important;
   color: var(--ink);
   letter-spacing: -0.02em;
@@ -95,14 +99,15 @@
   color: #f5a623;
 }
 .pp__price {
-  font-size: 2.4rem;
+  font-size: 1.8rem;
   font-weight: 800 !important;
   color: var(--red);
   letter-spacing: -0.02em;
 }
 .pp__pricenote {
-  color: var(--ink-2);
-  margin: 6px 0 26px;
+  color: var(--ink);
+  font-size: 0.95rem;
+  margin: 6px 0 24px;
   line-height: 1.6;
 }
 .pp__pricenote b {
@@ -110,10 +115,10 @@
   font-weight: 700 !important;
 }
 .pp__h3 {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 700 !important;
   color: var(--ink);
-  margin: 30px 0 14px;
+  margin: 26px 0 12px;
 }
 .pp__packlabel {
   display: block;
@@ -148,16 +153,16 @@
   margin-top: 18px;
   padding: 14px 18px;
   border-radius: var(--r);
-  background: #eaf7ec;
-  color: #1a7f37;
-  font-size: 0.95rem;
+  background: var(--red-soft);
+  color: var(--red);
+  font-size: 0.92rem;
 }
 .pp__stockdot {
   display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #1a7f37;
+  background: var(--red);
   margin-right: 6px;
 }
 .pp__stock b {
@@ -272,6 +277,9 @@
   font-size: 1.2rem;
   margin-bottom: 4px;
 }
+.pp__tdot svg {
+  color: #fff; /* white icon inside the red circle */
+}
 .pp__tstep strong {
   color: var(--ink);
   font-weight: 700 !important;
@@ -284,8 +292,8 @@
 .pp__tline {
   position: absolute;
   top: 28px;
-  left: 60%;
-  width: 80%;
+  left: calc(50% + 34px); /* 56px circle → 28px radius + 6px gap */
+  right: calc(-50% + 34px);
   border-top: 2px dotted rgba(225, 14, 18, 0.4);
   z-index: -1;
 }
@@ -337,32 +345,37 @@
 .pp__gift {
   margin-top: 18px;
   padding: 16px;
-  border: 1.5px solid #bfe6c8;
-  background: #f0faf2;
-  color: #1a7f37;
+  border: 1.5px solid color-mix(in srgb, var(--red) 28%, transparent);
+  background: var(--red-soft);
+  color: var(--red);
   border-radius: var(--r);
   text-align: center;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 .pp__features {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   margin-top: 18px;
+  align-items: stretch;
 }
 .pp__feat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  justify-content: center; /* centre content so every card balances */
+  gap: 6px;
   text-align: center;
-  padding: 16px 8px;
+  padding: 12px 10px;
+  min-height: 92px; /* uniform, compact card height */
+  height: 100%;
   border: 1px solid var(--line);
   border-radius: var(--r);
 }
-.pp__feat svg {
-  color: var(--red);
+.pp__feat-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
 }
 .pp__feat strong {
   font-size: 0.85rem;
@@ -387,15 +400,21 @@
   font-size: 0.85rem;
   font-weight: 600 !important;
 }
+.pp__check {
+  color: var(--red); /* red tick */
+  font-style: normal;
+  font-weight: 800;
+}
 .pp__lead {
-  margin-top: 26px;
-  font-size: 1.1rem;
+  margin-top: 24px;
+  font-size: 1rem;
   color: var(--ink);
   line-height: 1.6;
 }
 .pp__para {
   margin-top: 16px;
-  color: var(--ink-2);
+  color: var(--ink);
+  font-size: 0.95rem;
   line-height: 1.7;
 }
 .pp__para b {
@@ -411,7 +430,8 @@
 .pp__bullets li {
   position: relative;
   padding-left: 22px;
-  color: var(--ink-2);
+  color: var(--ink);
+  font-size: 0.95rem;
   line-height: 1.5;
 }
 .pp__bullets li::before {
@@ -470,14 +490,16 @@
 }
 .pp__prep-txt {
   font-size: 0.84rem;
-  color: var(--ink-2);
+  color: var(--ink);
   line-height: 1.35;
 }
+/* Starts just outside this circle's right edge and ends just before the next
+   circle (44px circle → 22px radius + 7px gap), so it never merges the dots. */
 .pp__prep-line {
   position: absolute;
   top: 22px;
-  left: 62%;
-  width: 76%;
+  left: calc(50% + 29px);
+  right: calc(-50% + 29px);
   border-top: 2px dotted #e6b5b7;
 }
 
@@ -487,8 +509,9 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  margin-top: 26px;
-  color: var(--ink-2);
+  margin-top: 22px;
+  font-size: 0.92rem;
+  color: var(--ink); /* black */
 }
 .pp__sharebtn {
   width: 36px;
@@ -512,48 +535,82 @@
 .pp__dispatch {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 24px;
-  padding: 18px;
+  gap: 7px;
+  margin-top: 20px;
+  padding: 12px;
   border-radius: var(--r);
   background: var(--cream-2);
 }
 .pp__disp {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 10px;
+  padding: 10px 14px;
   border-radius: var(--r-sm);
   background: #fff;
   color: var(--ink);
+  font-size: 0.9rem;
 }
 .pp__disp svg {
-  color: var(--ink-2);
+  width: 20px;
+  height: 20px;
+  color: var(--ink); /* black icon */
   flex: none;
+}
+
+/* ---- Mobile gallery carousel (hidden on desktop) ---- */
+.pp__carousel {
+  display: none;
+}
+.pp__carousel-track {
+  display: flex;
+  transition: transform 0.5s var(--ease);
+  touch-action: pan-y; /* allow vertical scroll, capture horizontal swipe */
+}
+.pp__carousel-track img {
+  flex: 0 0 100%;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+.pp__carousel-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pp__carousel-dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s var(--ease), background 0.3s var(--ease);
+}
+.pp__carousel-dots button.is-active {
+  width: 22px;
+  background: #fff;
 }
 
 @media (max-width: 960px) {
   .pp__grid {
     grid-template-columns: 1fr;
   }
-  .pp__main {
-    position: static;
-    height: auto;
-  }
-  .pp__main img {
-    height: auto;
-    aspect-ratio: 4 / 5;
-  }
+  /* Replace the sticky main + thumbs with a single swipeable carousel. */
+  .pp__main,
   .pp__thumbs {
-    position: static;
-    height: auto;
-    overflow-x: auto;
-    overflow-y: visible;
-    flex-direction: row;
+    display: none;
   }
-  .pp__thumbs img {
-    flex: 0 0 40%;
-    aspect-ratio: 3 / 3.5;
+  .pp__carousel {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
   }
 }
 @media (max-width: 620px) {

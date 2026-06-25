@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { galleryFor, imageFor } from '../lib/images.js'
 import { BESTSELLERS, MOST_LOVED } from '../lib/products.js'
 import './productpage.css'
@@ -17,10 +17,10 @@ const SHARE = [
   { label: 'Email', icon: 'fa-solid fa-envelope' },
 ]
 const FEATURES = [
-  { icon: 'truck', t: 'Free Shipping', s: '₹499+' },
-  { icon: 'lock', t: 'Secure Checkout', s: '' },
-  { icon: 'tag', t: 'COD Available', s: '' },
-  { icon: 'plane', t: 'TSA-Friendly', s: '' },
+  { icon: '🚚', t: 'Free Shipping', s: '₹499+' },
+  { icon: '🔒', t: 'Secure Checkout', s: '' },
+  { icon: '🏷️', t: 'COD Available', s: '' },
+  { icon: '✈️', t: 'TSA-Friendly', s: '' },
 ]
 
 // Inline icons (render reliably regardless of the icon CDN).
@@ -67,16 +67,27 @@ export default function ProductPage() {
   const [product, setProduct] = useState(null)
   const [pack, setPack] = useState(0)
   const [qty, setQty] = useState(1)
+  const [slide, setSlide] = useState(0) // mobile gallery carousel
+  const touchX = useRef(0)
 
   useEffect(() => {
     const onOpen = (e) => {
       setProduct(e.detail)
       setPack(0)
       setQty(1)
+      setSlide(0)
     }
     window.addEventListener('productpage', onOpen)
     return () => window.removeEventListener('productpage', onOpen)
   }, [])
+
+  // Auto-advance the mobile gallery carousel.
+  useEffect(() => {
+    if (!product) return
+    const n = galleryFor(product.name, 5).length
+    const id = setInterval(() => setSlide((s) => (s + 1) % n), 3500)
+    return () => clearInterval(id)
+  }, [product])
 
   useEffect(() => {
     if (product) {
@@ -123,7 +134,7 @@ export default function ProductPage() {
   return (
     <div className="pp" data-lenis-prevent>
       <div className="pp__grid container">
-        {/* ---------- Gallery: sticky main + scrolling thumbs ---------- */}
+        {/* ---------- Gallery: sticky main + scrolling thumbs (desktop) ---------- */}
         <div className="pp__gallery">
           <div className="pp__main">
             <img src={gallery[0]} alt={p.name} />
@@ -132,6 +143,34 @@ export default function ProductPage() {
             {gallery.slice(1).map((g, i) => (
               <img key={i} src={g} alt={`${p.name} — view ${i + 2}`} loading="lazy" />
             ))}
+          </div>
+
+          {/* Mobile: one swipeable, auto-playing carousel with dots */}
+          <div className="pp__carousel">
+            <div
+              className="pp__carousel-track"
+              style={{ transform: `translateX(-${slide * 100}%)` }}
+              onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+              onTouchEnd={(e) => {
+                const dx = e.changedTouches[0].clientX - touchX.current
+                if (dx > 40) setSlide((s) => (s - 1 + gallery.length) % gallery.length)
+                else if (dx < -40) setSlide((s) => (s + 1) % gallery.length)
+              }}
+            >
+              {gallery.map((g, i) => (
+                <img key={i} src={g} alt={`${p.name} — view ${i + 1}`} loading="lazy" />
+              ))}
+            </div>
+            <div className="pp__carousel-dots">
+              {gallery.map((_, i) => (
+                <button
+                  key={i}
+                  className={i === slide ? 'is-active' : ''}
+                  aria-label={`Go to image ${i + 1}`}
+                  onClick={() => setSlide(i)}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -228,7 +267,7 @@ export default function ProductPage() {
           <div className="pp__features">
             {FEATURES.map((f) => (
               <div key={f.t} className="pp__feat">
-                <Ico name={f.icon} />
+                <span className="pp__feat-emoji">{f.icon}</span>
                 <strong>{f.t}</strong>
                 {f.s && <span>{f.s}</span>}
               </div>
@@ -237,7 +276,9 @@ export default function ProductPage() {
 
           <div className="pp__badges">
             {BADGES.map((b) => (
-              <span key={b} className="pp__badge">✓ {b}</span>
+              <span key={b} className="pp__badge">
+                <i className="pp__check">✓</i> {b}
+              </span>
             ))}
           </div>
 

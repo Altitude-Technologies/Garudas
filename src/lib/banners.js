@@ -13,55 +13,14 @@
 // Prefix with BASE_URL so banners load under a GitHub Pages sub-path too.
 const img = (f) => `${import.meta.env.BASE_URL}images/${f}`
 
+// The banner artwork itself is the content (uploaded by the client). Each slide
+// is just the image; filenames have spaces, so they're URL-encoded.
 export const BANNERS = [
-  {
-    id: 'b1',
-    image: img('table-food.jpg'),
-    eyebrow: 'A Symbol of Trust & Quality · Since 1977',
-    title: 'Your Indian Kitchen',
-    titleAccent: 'Anywhere',
-    subtitle:
-      'Chef-crafted meals, zero preservatives, ready in 5 minutes. Carried by 30,000+ families across 50+ countries.',
-    ctaText: 'Shop the Range',
-    ctaLink: '#shop',
-    align: 'left',
-  },
-  {
-    id: 'b2',
-    image: img('cooking.jpg'),
-    eyebrow: 'Freeze-dried · 97% nutrition retained',
-    title: 'Real Food,',
-    titleAccent: 'Real Fast',
-    subtitle:
-      'No fridge, no fuss. From hostels to Himalayan treks — authentic Indian dishes that travel with you.',
-    ctaText: 'Why Garudas',
-    ctaLink: '#why',
-    align: 'left',
-  },
-  {
-    id: 'b3',
-    image: img('thali-spread.jpg'),
-    eyebrow: 'Organic Farms',
-    title: 'From Our Farms',
-    titleAccent: 'To Your Bowl',
-    subtitle:
-      'Spices, grains and produce grown the honest way — the foundation of every Garudas recipe.',
-    ctaText: 'Explore Organic',
-    ctaLink: '#shop',
-    align: 'left',
-  },
-  {
-    id: 'b4',
-    image: img('hero-spread.jpg'),
-    eyebrow: 'Snacks & Sweets',
-    title: 'Crisp, Golden,',
-    titleAccent: 'Ready in 5',
-    subtitle:
-      'Tea-time classics and festive sweets, crafted by master chefs and made for the world.',
-    ctaText: 'Shop Snacks',
-    ctaLink: '#shop',
-    align: 'left',
-  },
+  { id: 'b1', image: img('Banner/Banner%2001.png') },
+  { id: 'b2', image: img('Banner/Banner%2002.png') },
+  { id: 'b3', image: img('Banner/Banner%2003.png') },
+  { id: 'b4', image: img('Banner/Banner%2004.png') },
+  { id: 'b5', image: img('Banner/Banner%2005.png') },
 ]
 
 // Static brand proof points shown across all slides.

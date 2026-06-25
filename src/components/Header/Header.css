@@ -179,6 +179,19 @@
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink) transparent; /* black thumb so the scroll is obvious */
+}
+.mega::-webkit-scrollbar {
+  width: 9px;
+}
+.mega::-webkit-scrollbar-thumb {
+  background: var(--ink);
+  border-radius: 100px;
+  border: 2px solid var(--white);
+}
+.mega::-webkit-scrollbar-track {
+  background: transparent;
 }
 .mega__panel {
   padding: 26px var(--gutter) 24px;
@@ -225,18 +238,19 @@
   padding-bottom: 8px;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
-  scrollbar-color: var(--cream-3) transparent;
+  scrollbar-color: var(--ink) transparent; /* black thumb so the scroll is obvious */
   -webkit-overflow-scrolling: touch;
 }
 .mega__cards::-webkit-scrollbar {
-  height: 6px;
+  height: 7px;
 }
 .mega__cards::-webkit-scrollbar-thumb {
-  background: var(--cream-3);
+  background: var(--ink);
   border-radius: 100px;
 }
 .mega__cards::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 100px;
 }
 .mcard {
   flex: 0 0 108px;

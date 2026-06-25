@@ -56,13 +56,16 @@ export default function MobileMenu({ open, onClose }) {
                     <div className="mmenu__col" key={col.name}>
                       <p className="mmenu__colname">{col.name}</p>
                       <ul>
-                        {col.items.map((it) => (
-                          <li key={it}>
-                            <a href="#shop" onClick={onClose}>
-                              {it}
-                            </a>
-                          </li>
-                        ))}
+                        {col.items.map((it) => {
+                          const name = typeof it === 'string' ? it : it.name
+                          return (
+                            <li key={name}>
+                              <a href="#shop" onClick={onClose}>
+                                {name}
+                              </a>
+                            </li>
+                          )
+                        })}
                       </ul>
                     </div>
                   ))}

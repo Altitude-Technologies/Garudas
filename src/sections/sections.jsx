@@ -7,19 +7,51 @@ import {
   SHOP_CATEGORIES,
   BESTSELLERS,
   MOST_LOVED,
-  PICKLES,
-  PASTES,
+  BEVERAGES,
+  ORGANIC,
   MARKETPLACES,
 } from '../lib/products.js'
 
 const rupee = (n) => `₹${n}.00`
 
+// Resolve any file under /public/images/ (handles spaces & dots in folders).
+const imgPath = (p) => `${import.meta.env.BASE_URL}${encodeURI('images/' + p)}`
+
 const CAT_IMG = {
-  'All Products': IMG.thali,
-  'Instant Foods': IMG.idli,
-  Beverages: IMG.juices,
-  'Organic Farms': IMG.veggies,
-  Combos: IMG.curryBowls,
+  'Instant Foods': imgPath('01. INSTANT FOODS/01. Powder Products/01. Idly Batter Mix/Front.png'),
+  'Culinary Mixes & Pastes': imgPath('01. INSTANT FOODS/02. Culinary/07. Chettinad Biriyani Mix/Front.png'),
+  Beverages: imgPath('03. Beverages/01. Trooz/Mango.png'),
+  'Organic Farm Products': imgPath('04. Organic Products/01. Fruit/Mango.png'),
+  Fisheries: imgPath('04. Organic Products/08. FISHERIES/Catla.png'),
+  'Livestock & Poultry': imgPath('04. Organic Products/10. Poultry/Chicken.jpg'),
+  'Cold Pressed Oils': IMG.oil,
+}
+
+// Real Garudas product packshots under /public/images/01. INSTANT FOODS/.
+// encodeURI handles the spaces & dots in the folder names.
+const F = (p) => `${import.meta.env.BASE_URL}${encodeURI('images/01. INSTANT FOODS/' + p)}`
+const FOOD_IMG = {
+  'Instant Idly Batter Mix': F('01. Powder Products/01. Idly Batter Mix/Front.png'),
+  'Instant Dosa Batter Mix': F('01. Powder Products/02. Instant Dosa Batter Mix/Front.png'),
+  'Instant Masal Vadai Mix': F('01. Powder Products/03. Instant Masal Vadai Mix/Front.png'),
+  'Rice Pongal Mix': F('01. Powder Products/08. Rice Pongal Mix/Front.png'),
+  'Fish Curry Paste': F('02. Culinary/03. Fish Curry Mix/Front.png'),
+  'Chicken / Mutton Roast Mix': F('02. Culinary/01. Chicken Roast/Front.png'),
+  'Mughal Biryani': F('02. Culinary/08. Mughal Biriyani/Front.png'),
+  'Chettinadu Biryani Mix': F('02. Culinary/07. Chettinad Biriyani Mix/Front.png'),
+}
+// Each product folder has Front/Back/Info — used as the 3-image hover gallery
+// (left·middle·right thirds → image 1·2·3) with dots below.
+const gal = (folder) => [
+  F(`${folder}/Front.png`),
+  F(`${folder}/Back.png`),
+  F(`${folder}/Info.png`),
+]
+const FOOD_GALLERY = {
+  'Instant Idly Batter Mix': gal('01. Powder Products/01. Idly Batter Mix'),
+  'Instant Dosa Batter Mix': gal('01. Powder Products/02. Instant Dosa Batter Mix'),
+  'Instant Masal Vadai Mix': gal('01. Powder Products/03. Instant Masal Vadai Mix'),
+  'Rice Pongal Mix': gal('01. Powder Products/08. Rice Pongal Mix'),
 }
 
 /* --------------------------------------------------------- FEATURE STRIP */
@@ -170,7 +202,10 @@ export function ShopByCategory() {
     <section className="shopcat block" id="shop">
       <div className="container">
         <div className="shopcat__head">
-          <h2 className="section-title">Shop By Category</h2>
+          <div>
+            <h2 className="section-title">Shop By Category</h2>
+            <p className="shopcat__sub">Everything You Need. All Under Garudas.</p>
+          </div>
           <div className="shopcat__nav">
             <button
               className="shopcat__btn"
@@ -354,7 +389,7 @@ export function Bestsellers() {
         </div>
         <div className="pgrid">
           {BESTSELLERS.map((p, i) => (
-            <ProductCard key={p.name} p={p} delay={i * 0.06} />
+            <ProductCard key={p.name} p={{ ...p, gallery: FOOD_GALLERY[p.name] }} delay={i * 0.06} />
           ))}
         </div>
       </div>
@@ -404,7 +439,7 @@ export function MostLoved() {
         </div>
         <div className="pgrid">
           {MOST_LOVED.map((p, i) => (
-            <MealCard key={p.name} p={p} delay={i * 0.06} />
+            <MealCard key={p.name} p={{ ...p, img: FOOD_IMG[p.name] }} delay={i * 0.06} />
           ))}
         </div>
       </div>
@@ -533,20 +568,48 @@ function Showcase({ variant, eyebrow, title, copy, link, items, bg }) {
   )
 }
 
-// Each pickle gets a coherent, distinct image.
-const PICKLE_IMG = {
-  'Mango Thokku Pickle': IMG.mango,
-  'Garlic Pickle': IMG.gravyPan,
-  'Green Chilli Pickle': IMG.broccoli,
-  'Lemon Pickle': IMG.fruits,
-  'Mixed Veg Pickle': IMG.veggies,
-  'Ginger Pickle': IMG.spiceBowls,
+// Real Garudas beverage packshots under /public/images/03. Beverages/.
+const BEV = (p) => `${import.meta.env.BASE_URL}${encodeURI('images/03. Beverages/' + p)}`
+const BEVERAGE_IMG = {
+  Mango: BEV('01. Trooz/Mango.png'),
+  Guava: BEV('01. Trooz/Guava.png'),
+  Apple: BEV('01. Trooz/Apple.png'),
+  'Lemon Ginger': BEV('02. CSD/Lemon Ginger.png'),
+  'Nimbu Salt & Sugar': BEV('02. CSD/Nimbu Salt.png'),
+  Pineapple: BEV('02. CSD/Pineapple.png'),
+  'Nannari Sarbath': BEV('02. CSD/Nanari Sarbath.png'),
+  Lychee: BEV('02. CSD/Lychee.png'),
+  'Green Apple Fizz': BEV('02. CSD/Green Apple.png'),
+  'Paneer Soda': BEV('02. CSD/Paneer Soda.png'),
 }
 
-// Unique editorial section: warm cream backdrop, oversized title with a
-// rotated "handmade" stamp, and a horizontal snap-scroll rail of jars.
+// Editorial section: warm cream backdrop, oversized title with a rotated
+// stamp, and a horizontal snap-scroll rail of bottles.
 export function Pickles() {
   const rail = useRef(null)
+  const [atStart, setAtStart] = useState(true)
+  const [atEnd, setAtEnd] = useState(false)
+
+  const update = () => {
+    const r = rail.current
+    if (!r) return
+    // The rail has a few px of left padding, so allow a small threshold.
+    setAtStart(r.scrollLeft <= 8)
+    setAtEnd(r.scrollLeft + r.clientWidth >= r.scrollWidth - 8)
+  }
+
+  useEffect(() => {
+    update()
+    const r = rail.current
+    if (!r) return
+    r.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      r.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
   const nudge = (d) => rail.current?.scrollBy({ left: d, behavior: 'smooth' })
 
   return (
@@ -557,31 +620,31 @@ export function Pickles() {
       <div className="container">
         <div className="pickles__head">
           <div className="pickles__lead">
-            <span className="eyebrow">New &amp; Hot · Handcrafted</span>
+            <span className="eyebrow">Refreshingly Natural</span>
             <h2 className="pickles__title">
-              Pickles
+              Beverages
               <span className="pickles__stamp">
-                Aged to
+                Fresh &amp;
                 <br />
-                perfection
+                natural
               </span>
             </h2>
           </div>
           <div className="pickles__aside">
             <p>
-              Sun-ripened and slow-cured in small batches — the taste of home, sealed jar by jar.
+              Traditional and fruit-based beverages prepared with carefully selected ingredients for everyday refreshment.
             </p>
             <div className="pickles__actions">
               <a href="#shop" className="pickles__shop">
-                <span>Shop Pickles</span> <Arrow />
+                <span>Shop Beverages</span> <Arrow />
               </a>
               <div className="pickles__nav">
-                <button className="btn-sweep" onClick={() => nudge(-340)} aria-label="Scroll left">
+                <button className="btn-sweep" onClick={() => nudge(-340)} disabled={atStart} aria-label="Scroll left">
                   <svg viewBox="0 0 24 24" width="20" height="20">
                     <path fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" d="M15 6l-6 6 6 6" />
                   </svg>
                 </button>
-                <button className="btn-sweep" onClick={() => nudge(340)} aria-label="Scroll right">
+                <button className="btn-sweep" onClick={() => nudge(340)} disabled={atEnd} aria-label="Scroll right">
                   <svg viewBox="0 0 24 24" width="20" height="20">
                     <path fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
                   </svg>
@@ -592,8 +655,8 @@ export function Pickles() {
         </div>
 
         <div className="pickles__rail" ref={rail}>
-          {PICKLES.map((p, i) => (
-            <ProductCard key={p.name} p={{ ...p, img: PICKLE_IMG[p.name] }} delay={i * 0.04} />
+          {BEVERAGES.map((p, i) => (
+            <ProductCard key={p.name} p={{ ...p, img: BEVERAGE_IMG[p.name] }} delay={i * 0.04} />
           ))}
         </div>
       </div>
@@ -601,16 +664,30 @@ export function Pickles() {
   )
 }
 
+// Real Garudas organic photos under /public/images/04. Organic Products/.
+const ORG = (p) => `${import.meta.env.BASE_URL}${encodeURI('images/04. Organic Products/' + p)}`
+const ORGANIC_IMG = {
+  Agriculture: ORG('0. AGRICULTURE/Rice.png'),
+  'Fresh Fruits': ORG('01. Fruit/Mango.png'),
+  'Fresh Vegetables': ORG('02. Vegetables/Tomato.png'),
+  'Greens & Herbs': ORG('03.GREEN LEAF VEGETABLE/CORIANDER.png'),
+  'Medicinal Plants': ORG('05. MEDICINAL PLANT/ALOEVERA.png'),
+  Fisheries: ORG('08. FISHERIES/Catla.png'),
+  Livestock: ORG('09. LIVESTOCK/Goat.jpg'),
+  Poultry: ORG('10. Poultry/Chicken.jpg'),
+  Oils: IMG.oil, // no oils photo in the folder — keep the existing image
+}
+
 export function Pastes() {
   return (
     <Showcase
       variant="green"
-      eyebrow="Cook smarter"
-      title="Sauces, Gravy & Pastes"
-      copy="Restaurant-grade bases — one jar, a dozen dishes."
-      link="Shop Pastes"
-      items={PASTES}
-      bg={IMG.gravyPan}
+      eyebrow="Fresh From Nature"
+      title="Organic Farm"
+      copy="Premium agricultural and horticultural products sourced directly from trusted farms and growers."
+      link="Shop Organic Farm"
+      items={ORGANIC.map((o) => ({ ...o, img: ORGANIC_IMG[o.name] }))}
+      bg={IMG.veggies2}
     />
   )
 }
@@ -659,9 +736,12 @@ export function SocialWall() {
         <div className="smwall__head">
           <div>
             <span className="eyebrow">
-              <span className="smwall__live" /> Live from the feed
+              <span className="smwall__live" /> Community Section
             </span>
-            <h2 className="section-title">From Our Community</h2>
+            <h2 className="section-title">The Garudas Family</h2>
+            <p className="smwall__sub">
+              Recipes, customer stories, farm updates, cooking inspiration & community moments shared by Garudas customers.
+            </p>
           </div>
           <a href="#community" className="smwall__follow">
             <PlatformIcon platform="instagram" />

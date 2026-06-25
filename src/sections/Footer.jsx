@@ -80,7 +80,7 @@ export default function Footer() {
 
       {/* ---- Oversized ghost wordmark ---- */}
       <div className="footer__wordmark" aria-hidden="true">
-        Garudas
+        Garudas Delights
       </div>
     </footer>
   )
