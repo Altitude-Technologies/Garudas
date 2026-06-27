@@ -86,7 +86,21 @@ export default function QuickView() {
 
   const open = !!product
   const d = product ? buildDetails(product) : null
-  const gallery = product ? galleryFor(product.name, 5) : []
+  // Use the product's real images when provided, else fall back to stock.
+  const gallery = product
+    ? product.gallery?.length
+      ? product.gallery
+      : product.img
+        ? [product.img]
+        : galleryFor(product.name, 5)
+    : []
+
+  // Auto-advance the popup gallery while open.
+  useEffect(() => {
+    if (!product || gallery.length < 2) return
+    const id = setInterval(() => setActive((a) => (a + 1) % gallery.length), 2500)
+    return () => clearInterval(id)
+  }, [product, gallery.length])
   const total = d ? d.price * PACKS[pack].mult * qty : 0
 
   return (

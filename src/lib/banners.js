@@ -16,11 +16,11 @@ const img = (f) => `${import.meta.env.BASE_URL}images/${f}`
 // The banner artwork itself is the content (uploaded by the client). Each slide
 // is just the image; filenames have spaces, so they're URL-encoded.
 export const BANNERS = [
-  { id: 'b1', image: img('Banner/Banner%2001.png') },
-  { id: 'b2', image: img('Banner/Banner%2002.png') },
   { id: 'b3', image: img('Banner/Banner%2003.png') },
   { id: 'b4', image: img('Banner/Banner%2004.png') },
+  { id: 'b2', image: img('Banner/Banner%2002.png') },
   { id: 'b5', image: img('Banner/Banner%2005.png') },
+  { id: 'b1', image: img('Banner/Banner%2001.png') },
 ]
 
 // Static brand proof points shown across all slides.

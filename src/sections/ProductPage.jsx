@@ -84,8 +84,9 @@ export default function ProductPage() {
   // Auto-advance the mobile gallery carousel.
   useEffect(() => {
     if (!product) return
-    const n = galleryFor(product.name, 5).length
-    const id = setInterval(() => setSlide((s) => (s + 1) % n), 3500)
+    const n = product.gallery?.length || (product.img ? 1 : galleryFor(product.name, 5).length)
+    if (n < 2) return
+    const id = setInterval(() => setSlide((s) => (s + 1) % n), 2500)
     return () => clearInterval(id)
   }, [product])
 
@@ -117,7 +118,8 @@ export default function ProductPage() {
   if (!product) return null
 
   const p = product
-  const gallery = galleryFor(p.name, 5) // 1 main + 4 side thumbnails
+  // Use the product's real images when provided, else fall back to stock.
+  const gallery = p.gallery?.length ? p.gallery : p.img ? [p.img] : galleryFor(p.name, 5)
   const rating = p.rating ?? 4.36
   const reviews = p.reviews ?? 25
   const total = p.price * PACKS[pack].mult * qty

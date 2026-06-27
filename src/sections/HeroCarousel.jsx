@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { BANNERS } from '../lib/banners.js'
 
-const DURATION = 6000 // ms per slide
+const DURATION = 2500 // ms per slide
 
 export default function HeroCarousel() {
   const [index, setIndex] = useState(0)
