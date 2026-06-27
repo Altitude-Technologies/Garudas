@@ -466,7 +466,7 @@ export function WhyDifferent() {
     <section className="why" id="why">
       <div className="container why__inner">
         <Reveal className="why__media">
-          <img src={IMG.curryBowls} alt="Garudas meal" />
+          <img src={FOOD_IMG['Instant Dosa Batter Mix']} alt="Garudas Instant Dosa Batter Mix" />
         </Reveal>
         <div className="why__copy">
           <h2 className="section-title why__title">Why Garudas is Different</h2>

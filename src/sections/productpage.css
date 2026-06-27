@@ -97,7 +97,7 @@
   color: #f5a623;
 }
 .pp__price {
-  font-size: 1.8rem;
+  font-size: clamp(1.4rem, 4.5vw, 1.8rem);
   font-weight: 800 !important;
   color: var(--red);
   letter-spacing: -0.02em;
@@ -623,5 +623,13 @@
   .pp__buy {
     flex-direction: column;
     align-items: stretch;
+  }
+  .pp__pack {
+    min-width: 0;
+    flex: 1 1 64px;
+    padding: 11px 10px;
+  }
+  .pp__packrow {
+    flex-wrap: wrap;
   }
 }

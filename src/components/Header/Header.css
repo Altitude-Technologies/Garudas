@@ -45,7 +45,7 @@
 }
 .topbar__ticker {
   overflow: hidden;
-  max-width: 560px;
+  max-width: min(560px, 70vw);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
@@ -325,6 +325,12 @@
   .iconbtn--hide {
     display: none;
   }
+  .navbar__inner {
+    height: 84px;
+  }
+  .is-scrolled .navbar__inner {
+    height: 72px;
+  }
 }
 @media (max-width: 720px) {
   .topbar__socials,
@@ -336,6 +342,14 @@
   }
   .navbar__inner {
     height: 70px;
+  }
+}
+@media (max-width: 400px) {
+  .topbar__msg {
+    font-size: 0.74rem;
+  }
+  .mmenu__col ul {
+    grid-template-columns: 1fr;
   }
 }
 

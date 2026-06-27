@@ -48,6 +48,24 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* The header shrinks on smaller screens (topbar 42px + slimmer navbar), so the
+   global offset variable used by sticky elements / section padding follows it. */
+@media (max-width: 860px) {
+  :root {
+    --header-h: 118px;
+  }
+}
+@media (max-width: 720px) {
+  :root {
+    --header-h: 112px;
+  }
+}
+@media (max-width: 480px) {
+  :root {
+    --header-h: 104px;
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

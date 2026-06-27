@@ -1114,8 +1114,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35em;
-  font-size: clamp(2.8rem, 8vw, 5.6rem);
-  font-weight:900 !important; 
+  font-size: clamp(1.9rem, 8vw, 5.6rem);
+  font-weight:900 !important;
   letter-spacing: 0;
   /* Outlined letters that stay clean even where wide glyphs overlap: fill each
      letter with the band's own colour and paint it OVER the stroke, so every
@@ -1164,8 +1164,9 @@
 }
 .why__media img {
   width: 100%;
-  aspect-ratio: 1 / 0.86; /* medium height — slightly landscape, not tall */
+  aspect-ratio: 4 / 5; /* matches the portrait packshot — fills with no crop */
   object-fit: cover;
+  background: var(--cream-2);
   border-radius: clamp(20px, 1.8vw, 28px);
   box-shadow: var(--shadow-lg);
 }
@@ -1263,7 +1264,7 @@
 .pickles__title {
   position: relative;
   display: inline-block;
-  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  font-size: clamp(1.9rem, 6vw, 4.6rem);
   font-weight: 800;
   color: var(--ink);
   letter-spacing: -0.03em;
@@ -2559,5 +2560,68 @@
   }
   .qv__qty {
     justify-content: center;
+  }
+}
+
+/* =====================================================================
+   RESPONSIVE REFINEMENTS — tablet & phone gaps not covered above.
+   ===================================================================== */
+
+/* Tablet (≤900px): 6-up value props become 2-up; bestseller/most-loved
+   grids stay at 2-up; tame oversized fixed heights. */
+@media (max-width: 900px) {
+  .vprop__inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .made__panel {
+    min-height: clamp(360px, 56vh, 560px);
+  }
+}
+
+/* Large phone (≤560px): single-column product grids and content rails so
+   cards are full-width and legible; tighter gaps. */
+@media (max-width: 560px) {
+  .pgrid,
+  .show__rail,
+  .social {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .smwall__grid {
+    gap: 12px;
+  }
+  .shopcat__rail,
+  .pickles__rail {
+    gap: 12px;
+  }
+  .show__rail .pcard {
+    flex: 0 0 86vw;
+  }
+  .made__panel {
+    min-height: clamp(300px, 64vh, 460px);
+  }
+  .made__copy,
+  .pickles__head,
+  .block__head {
+    text-align: left;
+  }
+}
+
+/* Small phone (≤420px): single value-prop column, smaller hero stats,
+   compact category cards. */
+@media (max-width: 420px) {
+  .vprop__inner {
+    grid-template-columns: 1fr;
+  }
+  .trust__inner,
+  .avail__row {
+    grid-template-columns: 1fr;
+  }
+  .catcard {
+    flex-basis: 82vw;
+  }
+  .footer__wordmark {
+    font-size: clamp(1.3rem, 8vw, 6.4rem);
+    letter-spacing: 0.06em;
   }
 }
